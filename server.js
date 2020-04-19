@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const morgan = require('morgan')
 const { STATUS_CODES } = require('http')
 
 const authRoute = require('./routes/auth.route')
@@ -9,6 +10,11 @@ const app = express()
 /* Middlewares */
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+
+// show routes called in development
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'))
+}
 
 /* Routes */
 app.use('/auth', authRoute)
