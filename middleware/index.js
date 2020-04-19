@@ -1,7 +1,9 @@
 const { STATUS_CODES } = require('http')
 
+const logger = require('../logger')
+
 const handleValidationError = (err, req, res, next) => {
-    console.error(err)
+    logger.error(err)
 
     if (err.name !== 'ValidationError') return next(err)
 
@@ -16,7 +18,7 @@ const handleValidationError = (err, req, res, next) => {
 }
 
 const handleError = (err, req, res, next) => {
-    console.error(err)
+    logger.error(err)
     
     if (res.headersSent) return next(err)
 

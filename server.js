@@ -11,7 +11,7 @@ const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// show routes called in development
+// Show routes called only in development
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'))
 }
