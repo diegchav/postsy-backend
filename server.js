@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const { STATUS_CODES } = require('http')
 
-const authRoute = require('./routes/auth.route')
+const baseRouter = require('./routes')
 
 const app = express()
 
@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 /* Routes */
-app.use('/auth', authRoute)
+app.use('/api', baseRouter)
 
 /* Error handlers */
 app.use((err, req, res, next) => {
