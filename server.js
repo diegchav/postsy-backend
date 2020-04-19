@@ -2,12 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const { STATUS_CODES } = require('http')
 
-// load configuration from environment variables
-require('dotenv').config()
-
 const authRoute = require('./routes/auth.route')
-
-const port = process.env.PORT || 1337
 
 const app = express()
 
@@ -44,4 +39,4 @@ app.use((err, req, res, next) => {
     res.status(statusCode).json({ error: errorMessage })
 })
 
-app.listen(port, () => console.log(`Server listening on port ${port}`))
+module.exports = app
