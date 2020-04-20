@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { body, validationResult } from 'express-validator'
-import { BAD_REQUEST } from 'http-status-codes'
+import { BAD_REQUEST, OK } from 'http-status-codes'
 
 import UserService from '../services/user.service'
 
@@ -30,7 +30,7 @@ class AuthController {
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
             const errorsJSON = errors.array().map(e => toJsonError(e))
-            return res.status(BAD_REQUEST).json(errorsJSON)
+            return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, errors: errorsJSON })
         }
     
         next()
@@ -40,7 +40,7 @@ class AuthController {
         const userFields = {...req.body}
         const createdUser = await this.userService.create(userFields)
         const { email, username } = createdUser
-        res.json({ email, username })
+        res.json({ status: OK, user: { email, username } })
     }
 }
 

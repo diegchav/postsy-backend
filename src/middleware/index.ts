@@ -20,17 +20,26 @@ export const handleValidationError = (err: any, req: Request, res: Response, nex
         }
     })
 
-    res.status(BAD_REQUEST).json(errors)
+    res.status(BAD_REQUEST).json({ status: BAD_REQUEST, errors })
 }
 
 export const handleError = (err: HttpException, req: Request, res: Response, next: NextFunction) => {
     if (res.headersSent) return next(err)
 
     const statusCode = err.statusCode || INTERNAL_SERVER_ERROR
-    const errorMessage = getStatusText(statusCode) || getStatusText(INTERNAL_SERVER_ERROR)
-    res.status(statusCode).json({ error: errorMessage })
+    let errors = null
+    if (err.error) {
+        errors = [
+            err.error
+        ]
+    } else {
+        errors = {
+            error: err.message || getStatusText(statusCode)
+        }
+    }
+    res.status(statusCode).json({ status: statusCode, errors })
 }
 
 export const handleNotFound = (req: Request, res: Response) => {
-    res.status(NOT_FOUND).json({ error: getStatusText(NOT_FOUND) })
+    res.status(NOT_FOUND).json({ status: NOT_FOUND, errors: { error: getStatusText(NOT_FOUND) } })
 }
