@@ -7,8 +7,8 @@ import * as authController from '../controllers/auth.controller'
 import autoCatch from '../common/auto-catch'
 
 router.post('/signup',
-    authController.registerValidation,
-    authController.validateRegister,
-    autoCatch(authController.register))
+    authController.signUpValidation,
+    authController.validateSignUp,
+    autoCatch(authController.signUp))
 
 export default router

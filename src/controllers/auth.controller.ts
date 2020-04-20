@@ -6,7 +6,7 @@ import * as userService from '../services/user.service'
 
 import { toJsonError } from '../common/util'
 
-export const registerValidation = [
+export const signUpValidation = [
     body('username')
         .not().isEmpty().withMessage('Username is required').bail()
         .isAlphanumeric().withMessage('Username contains special characters')
@@ -23,7 +23,7 @@ export const registerValidation = [
         .normalizeEmail()
 ]
 
-export const validateRegister = (req: Request, res: Response, next: NextFunction) => {
+export const validateSignUp = (req: Request, res: Response, next: NextFunction) => {
     console.log(req.body)
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -34,7 +34,7 @@ export const validateRegister = (req: Request, res: Response, next: NextFunction
     next()
 }
 
-export const register = async (req: Request, res: Response) => {
+export const signUp = async (req: Request, res: Response) => {
     const userFields = {...req.body}
     const createdUser = await userService.create(userFields)
     const { email, username } = createdUser
