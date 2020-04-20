@@ -1,9 +1,9 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const morgan = require('morgan')
+import express from 'express'
+import bodyParser from 'body-parser'
+import morgan from 'morgan'
 
-const baseRouter = require('./routes')
-const middleware = require('./middleware')
+import baseRouter from './routes'
+import * as middleware from './middleware'
 
 const app = express()
 
@@ -20,8 +20,9 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/api', baseRouter)
 
 /* Error handlers */
+app.use(middleware.logErrors)
 app.use(middleware.handleValidationError)
 app.use(middleware.handleError)
 app.use(middleware.handleNotFound)
 
-module.exports = app
+export default app

@@ -1,4 +1,4 @@
-const { createLogger, format, transports } = require('winston')
+import { createLogger, format, transports } from 'winston' 
 const { File, Console } = transports
 
 // Init logger
@@ -27,8 +27,9 @@ if (process.env.NODE_ENV === 'production') {
     logger.add(errorTransport)
     logger.add(infoTransport)
 } else {
-    const errorStackFormat = format((info, opts) => {
+    const errorStackFormat = format((info) => {
         if (info.stack) {
+            // tslint:disable-next-line:no-console
             console.log(info.stack)
             return false
         }
@@ -44,4 +45,4 @@ if (process.env.NODE_ENV === 'production') {
     logger.add(consoleTransport)
 }
 
-module.exports = logger
+export default logger

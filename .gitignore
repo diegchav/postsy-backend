@@ -31,5 +31,8 @@ pids
 *.pid
 *.seed
 
+# Build
+dist
+
 # Project
 .env
