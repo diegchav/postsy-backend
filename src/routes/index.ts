@@ -1,8 +1,23 @@
 import express from 'express'
-const router = express.Router()
 
-import authRouter from './auth.router'
+import AuthRouter from './auth.router'
 
-router.use('/auth', authRouter)
+class BaseRouter {
+    private _router = express.Router()
 
-export default router
+    private authRouter = new AuthRouter()
+
+    constructor() {
+        this.initializeRoutes()
+    }
+
+    private initializeRoutes() {
+        this._router.use('/auth', this.authRouter.router)
+    }
+
+    get router() {
+        return this._router
+    }
+}
+
+export default BaseRouter

@@ -2,7 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
 
-import baseRouter from './routes'
+import BaseRouter from './routes'
 import * as middleware from './middleware'
 
 const app = express()
@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 /* Routes */
-app.use('/api', baseRouter)
+app.use('/api', new BaseRouter().router)
 
 /* Error handlers */
 app.use(middleware.logErrors)
