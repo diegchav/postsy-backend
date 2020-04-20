@@ -2,10 +2,13 @@ import express from 'express'
 
 const router = express.Router()
 
-import * as userController from '../controllers/auth.controller'
+import * as authController from '../controllers/auth.controller'
 
 import autoCatch from '../common/auto-catch'
 
-router.post('/signup', autoCatch(userController.create))
+router.post('/signup',
+    authController.registerValidation,
+    authController.validateRegister,
+    autoCatch(authController.register))
 
 export default router

@@ -21,10 +21,10 @@
     "cuid": "^2.1.8",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-validator": "^6.4.0",
     "http-status-codes": "^1.4.0",
     "mongoose": "^5.9.9",
     "morgan": "^1.10.0",
-    "validator": "^13.0.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {
@@ -36,7 +36,6 @@
     "@types/mongoose": "^5.7.12",
     "@types/morgan": "^1.9.0",
     "@types/node": "^13.13.0",
-    "@types/validator": "^13.0.0",
     "@typescript-eslint/eslint-plugin": "^2.28.0",
     "@typescript-eslint/parser": "^2.28.0",
     "eslint": "^6.8.0",
