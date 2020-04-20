@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from 'express'
-import { getStatusText, INTERNAL_SERVER_ERROR, NOT_FOUND } from 'http-status-codes'
+import { getStatusText, BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND } from 'http-status-codes'
 
 import HttpException from '../common/http-exception'
 import logger from '../common/logger'
 
 export const logErrors = (err: HttpException, req: Request, res: Response, next: NextFunction) => {
-    logger.error(err)
+    logger.error(`${err.name}: ${err.message}`)
+    logger.error(JSON.stringify(err))
     next(err)
 }
 
@@ -19,7 +20,7 @@ export const handleValidationError = (err: any, req: Request, res: Response, nex
         }
     })
 
-    res.status(400).json(errors)
+    res.status(BAD_REQUEST).json(errors)
 }
 
 export const handleError = (err: HttpException, req: Request, res: Response, next: NextFunction) => {
