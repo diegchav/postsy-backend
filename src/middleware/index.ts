@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { STATUS_CODES } from 'http'
+import { getStatusText, INTERNAL_SERVER_ERROR, NOT_FOUND } from 'http-status-codes'
 
 import HttpException from '../common/http-exception'
 import logger from '../common/logger'
@@ -25,13 +25,11 @@ export const handleValidationError = (err: any, req: Request, res: Response, nex
 export const handleError = (err: HttpException, req: Request, res: Response, next: NextFunction) => {
     if (res.headersSent) return next(err)
 
-    const statusCode = err.statusCode || 500
-    const errorMessage = STATUS_CODES[statusCode] || 'Internal Error'
+    const statusCode = err.statusCode || INTERNAL_SERVER_ERROR
+    const errorMessage = getStatusText(statusCode) || getStatusText(INTERNAL_SERVER_ERROR)
     res.status(statusCode).json({ error: errorMessage })
 }
 
 export const handleNotFound = (req: Request, res: Response) => {
-    const statusCode = 404
-    const errorMessage = STATUS_CODES[statusCode]
-    res.status(statusCode).json({ error: errorMessage })
+    res.status(NOT_FOUND).json({ error: getStatusText(NOT_FOUND) })
 }
