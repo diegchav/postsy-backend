@@ -8,7 +8,7 @@ import db from './db'
 db()
 
 import app from './server'
-import logger from './logger'
+import logger from './common/logger'
 
 const port = Number(process.env.PORT || 1337)
 app.listen(port, () => logger.info(`Server listening on port ${port}`))

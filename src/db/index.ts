@@ -1,6 +1,6 @@
 import { connect, ConnectionOptions } from 'mongoose'
 
-import logger from '../logger'
+import logger from '../common/logger'
 
 const db = async () => {
     try {

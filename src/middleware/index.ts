@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { STATUS_CODES } from 'http'
 
 import HttpException from '../common/http-exception'
-import logger from '../logger'
+import logger from '../common/logger'
 
 export const logErrors = (err: HttpException, req: Request, res: Response, next: NextFunction) => {
     logger.error(err)
