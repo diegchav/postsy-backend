@@ -5,8 +5,8 @@ import DBHandler from '../db-handler'
 import UserService from '../../src/services/user.service'
 import HttpException from '../../src/common/http-exception'
 
-const dbHandler: DBHandler = new DBHandler()
-const userService: UserService = new UserService()
+const dbHandler = new DBHandler()
+const userService = new UserService()
 
 /**
  * Mock data.
@@ -66,9 +66,9 @@ afterAll(async () => {
 })
 
 /**
- * User Service test suite.
+ * UserService test suite.
  */
-describe('User Service', () => {
+describe('UserService', () => {
     describe('user sign up', () => {
         /**
          * Test that a user with valid requirements can be created.

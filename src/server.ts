@@ -4,6 +4,7 @@ import morgan from 'morgan'
 
 import BaseRouter from './routes'
 import * as middleware from './middleware'
+import { BASE_PATH } from './constants'
 
 const app = express()
 
@@ -17,7 +18,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 /* Routes */
-app.use('/api', new BaseRouter().router)
+app.use(BASE_PATH, new BaseRouter().router)
 
 /* Error handlers */
 app.use(middleware.logErrors)

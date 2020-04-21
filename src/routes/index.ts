@@ -1,6 +1,7 @@
 import express from 'express'
 
 import AuthRouter from './auth.router'
+import { AUTH_PATH } from '../constants'
 
 class BaseRouter {
     private _router = express.Router()
@@ -12,7 +13,7 @@ class BaseRouter {
     }
 
     private initializeRoutes() {
-        this._router.use('/auth', this.authRouter.router)
+        this._router.use(AUTH_PATH, this.authRouter.router)
     }
 
     get router() {
