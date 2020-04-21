@@ -46,7 +46,7 @@ const userInvalidUsernameMaxLength = {
 
 const userInvalidPasswordMinLength = {
     username: 'Alex',
-    password: 'password',
+    password: 'pass',
     email: 'alex@example.com'    
 }
 

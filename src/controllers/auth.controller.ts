@@ -19,7 +19,7 @@ class AuthController {
             .not().matches(/^admin$/i).withMessage('Invalid username'),
         body('password')
             .not().isEmpty().withMessage('Password is required').bail()
-            .isLength({ min: 12 }).withMessage('Password must be at least 12 characters')
+            .isLength({ min: 8 }).withMessage('Password must be at least 12 characters')
             .isLength({ max: 120 }).withMessage('Password must be less than 120 characters'),
         body('email')
             .not().isEmpty().withMessage('Email is required').bail()
