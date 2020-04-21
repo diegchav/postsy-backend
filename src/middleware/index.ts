@@ -28,13 +28,11 @@ export const handleError = (err: HttpException, req: Request, res: Response, nex
 
     const statusCode = err.statusCode || INTERNAL_SERVER_ERROR
     let errors = null
-    if (err.error) {
-        errors = [
-            err.error
-        ]
+    if (err.errors) {
+        errors = err.errors
     } else {
         errors = {
-            error: err.message || getStatusText(statusCode)
+            error: getStatusText(statusCode)
         }
     }
     res.status(statusCode).json({ status: statusCode, errors })

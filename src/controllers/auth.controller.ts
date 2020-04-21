@@ -5,6 +5,7 @@ import { BAD_REQUEST, OK } from 'http-status-codes'
 import UserService from '../services/user.service'
 
 import { toJsonError } from '../common/util'
+import HttpException from '../common/http-exception'
 
 class AuthController {
     private userService = new UserService()
@@ -29,8 +30,9 @@ class AuthController {
     validateSignUp = (req: Request, res: Response, next: NextFunction) => {
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
-            const errorsJSON = errors.array().map(e => toJsonError(e))
-            return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, errors: errorsJSON })
+            const validationErrors = errors.array().map(e => toJsonError(e))
+            const httpError = new HttpException(BAD_REQUEST, 'Validation Error', validationErrors)
+            return next(httpError)
         }
     
         next()
