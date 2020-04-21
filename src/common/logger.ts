@@ -40,7 +40,8 @@ if (process.env.NODE_ENV === 'production') {
             format.colorize(),
             format.simple(),
             errorStackFormat()
-        )
+        ),
+        silent: process.env.NODE_ENV === 'test'
     })
     logger.add(consoleTransport)
 }
