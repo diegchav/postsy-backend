@@ -4,7 +4,6 @@
     "module": "commonjs",
     "sourceMap": true,
     "outDir": "dist",
-    "rootDir": "src",
     "removeComments": true,
     "importHelpers": true,
     "strict": true,
@@ -20,5 +19,8 @@
       ]
     },
     "esModuleInterop": true
-  }
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
 }
