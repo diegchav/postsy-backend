@@ -1,6 +1,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
+import cors from 'cors'
 
 import BaseRouter from './routes'
 import * as middleware from './middleware'
@@ -11,6 +12,7 @@ const app = express()
 /* Middlewares */
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cors())
 
 // Show routes called only in development
 if (process.env.NODE_ENV === 'development') {
