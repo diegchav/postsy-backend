@@ -23,6 +23,7 @@ export class User {
     public username!: string
 
     @prop({
+        minlength: 12,
         maxLength: 120,
         required: true
     })

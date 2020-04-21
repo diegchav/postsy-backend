@@ -44,6 +44,12 @@ const userInvalidUsernameMaxLength = {
     email: 'alex@example.com'
 }
 
+const userInvalidPasswordMinLength = {
+    username: 'Alex',
+    password: 'password',
+    email: 'alex@example.com'    
+}
+
 /**
  * Connect to a new in-memory database.
  */
@@ -130,6 +136,13 @@ describe('UserService', () => {
          */
         it('should fail if username length is greater thatn required', async () => {
             await expect(userService.create(userInvalidUsernameMaxLength)).rejects.toThrow(mongoose.Error)
+        })
+
+        /**
+         * Test user cannot be created if password length is less than required.
+         */
+        it('should fail if password length is less than required', async () => {
+            await expect(userService.create(userInvalidPasswordMinLength)).rejects.toThrow(mongoose.Error)
         })
     })
 })

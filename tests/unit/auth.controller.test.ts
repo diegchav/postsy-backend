@@ -44,6 +44,12 @@ const userInvalidUsernameMaxLength = {
     email: 'alex@example.com'
 }
 
+const userInvalidPasswordMinLength = {
+    username: 'Alex',
+    password: 'password',
+    email: 'alex@example.com'
+}
+
 const userInvalidEmail = {
     username: 'Alex',
     password: 'password1234',
@@ -143,6 +149,18 @@ describe('AuthController', () => {
         it('should fail if username length is greater than required', async () => {
             const res = await request(app).post(apiPath + '/signup')
                 .send(userInvalidUsernameMaxLength)
+                .expect(BAD_REQUEST)
+                .expect('Content-Type', /json/)
+
+            expect(res.body.errors).toBeDefined()
+        })
+
+        /**
+         * Test sign up fails if password length is less than required.
+         */
+        it('should fail if password length is less than required', async () => {
+            const res = await request(app).post(apiPath + '/signup')
+                .send(userInvalidPasswordMinLength)
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
