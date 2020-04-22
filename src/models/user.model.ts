@@ -29,7 +29,7 @@ export class User {
     })
     public password!: string
 
-    @prop({ required: true })
+    @prop({ required: true, unique: true })
     public email!: string
 
     @prop({ default: Date.now })

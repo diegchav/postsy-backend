@@ -41,8 +41,7 @@ class AuthController {
     
     signUp = async (req: Request, res: Response) => {
         const userFields = {...req.body}
-        // const createdUser = await this.userService.create(userFields)
-        const createdUser = { email: 'email', username: 'username' }
+        const createdUser = await this.userService.create(userFields)
         const { email, username } = createdUser
         logger.info(`Created user: { email: ${email}, username: ${username}}`)
         res.json({ status: OK, user: { email, username } })

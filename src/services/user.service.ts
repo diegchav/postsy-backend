@@ -11,9 +11,9 @@ class UserService {
         const existingUser = await UserModel.findOne({ username })
         if (existingUser) {
             const statusCode = BAD_REQUEST
-            const errorMessage = 'Username already taken'
-            const error = { username: 'Username already taken' }
-            throw new HttpException(statusCode, errorMessage, error)
+            const errorMessage = 'Validation Error'
+            const errors = [{ 'username': 'Username already taken' }]
+            throw new HttpException(statusCode, errorMessage, errors)
         }
 
         const user = await UserModel.create({
