@@ -6,6 +6,7 @@ import UserService from '../services/user.service'
 
 import { toJsonError } from '../common/util'
 import HttpException from '../common/http-exception'
+import logger from '../common/logger'
 
 class AuthController {
     private userService = new UserService()
@@ -19,7 +20,7 @@ class AuthController {
             .not().matches(/^admin$/i).withMessage('Invalid username'),
         body('password')
             .not().isEmpty().withMessage('Password is required').bail()
-            .isLength({ min: 8 }).withMessage('Password must be at least 12 characters')
+            .isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
             .isLength({ max: 120 }).withMessage('Password must be less than 120 characters'),
         body('email')
             .not().isEmpty().withMessage('Email is required').bail()
@@ -40,8 +41,10 @@ class AuthController {
     
     signUp = async (req: Request, res: Response) => {
         const userFields = {...req.body}
-        const createdUser = await this.userService.create(userFields)
+        // const createdUser = await this.userService.create(userFields)
+        const createdUser = { email: 'email', username: 'username' }
         const { email, username } = createdUser
+        logger.info(`Created user: { email: ${email}, username: ${username}}`)
         res.json({ status: OK, user: { email, username } })
     }
 }
