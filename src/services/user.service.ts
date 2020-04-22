@@ -8,11 +8,18 @@ class UserService {
         const { username, password, email } = userFields
 
         // Check if user already exists
-        const existingUser = await UserModel.findOne({ username })
-        if (existingUser) {
+        const existingUsername = await UserModel.findOne({ username })
+        if (existingUsername) {
             const statusCode = BAD_REQUEST
             const errorMessage = 'Validation Error'
             const errors = [{ 'username': 'Username already taken' }]
+            throw new HttpException(statusCode, errorMessage, errors)
+        }
+        const existingEmail = await UserModel.findOne({ email })
+        if (existingEmail) {
+            const statusCode = BAD_REQUEST
+            const errorMessage = 'Validation Error'
+            const errors = [{ 'email': 'Email already taken' }]
             throw new HttpException(statusCode, errorMessage, errors)
         }
 
