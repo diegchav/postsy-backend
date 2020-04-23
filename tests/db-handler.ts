@@ -36,6 +36,16 @@ class DBHandler {
         for (const key in collections) {
             const collection = collections[key]
             await collection.deleteMany({})
+        }
+    }
+
+    /**
+     * Drop all indexes from all db collections.
+     */
+    dropIndexes = async () => {
+        const collections = mongoose.connection.collections
+        for (const key in collections) {
+            const collection = collections[key]
             await collection.dropIndexes()
         }
     }

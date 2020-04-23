@@ -17,6 +17,18 @@ const userValid = {
     email: 'alex@example.com'
 }
 
+const userExistingUsername = {
+    username: 'Alex',
+    password: 'password1234',
+    email: 'notalex@example.com'
+}
+
+const userExistingEmail = {
+    username: 'NotAlex',
+    password: 'password1234',
+    email: 'alex@example.com'
+}
+
 const userMissingUsername = {
     password: 'password1234',
     email: 'alex@example.com'
@@ -93,6 +105,30 @@ describe('AuthController', () => {
 
             expect(res.body.user.username).toBe(userValid.username.toLowerCase())
             expect(res.body.user.email).toBe(userValid.email)
+        })
+
+        /**
+         * Test sign up fails if username already exists.
+         */
+        it('should fail if username already exists', async () => {
+            await request(app).post(apiPath + '/signup').send(userValid)
+            const res = await request(app).post(apiPath + '/signup').send(userExistingUsername)
+                .expect(BAD_REQUEST)
+                .expect('Content-Type', /json/)
+
+            expect(res.body.errors).toBeDefined()
+        })
+
+        /**
+         * Test sign up fails if email already exists.
+         */
+        it('should fail is email already exists', async () => {
+            await request(app).post(apiPath + '/signup').send(userValid)
+            const res = await request(app).post(apiPath + '/signup').send(userExistingEmail)
+                .expect(BAD_REQUEST)
+                .expect('Content-Type', /json/)
+            
+            expect(res.body.errors).toBeDefined()
         })
 
         /**

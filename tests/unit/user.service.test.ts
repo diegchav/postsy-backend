@@ -1,9 +1,9 @@
 import * as mongoose from 'mongoose'
+import { MongoError } from 'mongodb'
 
 import DBHandler from '../db-handler'
 
 import UserService from '../../src/services/user.service'
-import HttpException from '../../src/common/http-exception'
 
 const dbHandler = new DBHandler()
 const userService = new UserService()
@@ -13,6 +13,18 @@ const userService = new UserService()
  */
 const user = {
     username: 'Alex',
+    password: 'password1234',
+    email: 'alex@example.com'
+}
+
+const userExistingUsername = {
+    username: 'Alex',
+    password: 'password1234',
+    email: 'notalex@example.com'
+}
+
+const userExistingEmail = {
+    username: 'NotAlex',
     password: 'password1234',
     email: 'alex@example.com'
 }
@@ -62,6 +74,7 @@ beforeAll(async () => {
  */
 afterEach(async () => {
     await dbHandler.clearDatabase()
+    await dbHandler.dropIndexes()
 })
 
 /**
@@ -100,7 +113,19 @@ describe('UserService', () => {
          */
         it('should fail if a username already exists', async () => {
             await userService.create(user)
-            await expect(userService.create(user)).rejects.toThrow(HttpException)
+            expect(async () => {
+                await expect(userService.create(userExistingUsername)).toThrow(MongoError)
+            })
+        })
+
+        /**
+         * Test that emails are unique.
+         */
+        it('should fail if an email already exists', async () => {
+            await userService.create(user)
+            expect(async () => {
+                await expect(userService.create(userExistingEmail)).toThrow(MongoError)
+            })
         })
 
         /**
