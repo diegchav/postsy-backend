@@ -10,7 +10,7 @@ import { MONGO_DUP_KEY } from '../constants'
 
 export const logErrors = (err: HttpException, req: Request, res: Response, next: NextFunction) => {
     const reqInput = req.body || req.params || req.query
-    logger.info(`${req.method} : ${JSON.stringify(reqInput)}`)
+    logger.error(`/${req.method} - ${JSON.stringify(reqInput)}`)
     logger.error(`${err.name}: ${err.message}`)
     logger.error(JSON.stringify(err))
     next(err)
