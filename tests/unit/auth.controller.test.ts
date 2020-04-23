@@ -116,7 +116,7 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
-            expect(res.body.errors).toBeDefined()
+            expect(res.body.errors).toBeInstanceOf(Array)
         })
 
         /**
@@ -128,7 +128,7 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
             
-            expect(res.body.errors).toBeDefined()
+            expect(res.body.errors).toBeInstanceOf(Array)
         })
 
         /**
@@ -140,7 +140,7 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
             
-            expect(res.body.errors).toBeDefined()
+            expect(res.body.errors).toBeInstanceOf(Array)
         })
 
         /**
@@ -152,7 +152,7 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
             
-            expect(res.body.errors).toBeDefined()
+            expect(res.body.errors).toBeInstanceOf(Array)
         })
 
         /**
@@ -164,7 +164,7 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
-            expect(res.body.errors).toBeDefined()
+            expect(res.body.errors).toBeInstanceOf(Array)
         })
 
         /**
@@ -176,7 +176,7 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
-            expect(res.body.errors).toBeDefined()
+            expect(res.body.errors).toBeInstanceOf(Array)
         })
 
         /**
@@ -188,7 +188,7 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
-            expect(res.body.errors).toBeDefined()
+            expect(res.body.errors).toBeInstanceOf(Array)
         })
 
         /**
@@ -200,7 +200,7 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
-            expect(res.body.errors).toBeDefined()
+            expect(res.body.errors).toBeInstanceOf(Array)
         })
 
         /**
@@ -212,7 +212,7 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
-            expect(res.body.errors).toBeDefined()
+            expect(res.body.errors).toBeInstanceOf(Array)
         })
     })
 })
