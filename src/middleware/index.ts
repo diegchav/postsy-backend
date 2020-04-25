@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from 'express'
 import { MongoError } from 'mongodb'
 import { getStatusText, BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND } from 'http-status-codes'
 
-import HttpException from '../common/http-exception'
+import HttpException from '../exceptions/http-exception'
+import MongoValidationException from '../exceptions/mongo-validation-exception'
 import logger from '../common/logger'
 import { capitalize } from '../common/util'
 
@@ -19,7 +20,7 @@ export const logErrors = (err: HttpException, req: Request, res: Response, next:
 /**
  * Handle validation errors thrown by Mongo in case there is an index collision. 
  */
-export const handleValidationError = (err: MongoError, req: Request, res: Response, next: NextFunction) => {
+export const handleMongoValidationError = (err: MongoError, req: Request, res: Response, next: NextFunction) => {
     if (err.name !== 'MongoError') return next(err)
 
     let keyError = 'error'
@@ -34,24 +35,25 @@ export const handleValidationError = (err: MongoError, req: Request, res: Respon
         valueError = `${capitalize(keyError)} is already taken`
     }
 
-    res.status(BAD_REQUEST).json({ status: BAD_REQUEST, errors: [{ [keyError]: valueError }] })
+    const errors = [{ [keyError]: valueError }]
+    const mongoValidationException = new MongoValidationException(errors)
+    next(mongoValidationException)
 }
 
 export const handleError = (err: HttpException, req: Request, res: Response, next: NextFunction) => {
     if (res.headersSent) return next(err)
 
     const statusCode = err.statusCode || INTERNAL_SERVER_ERROR
+    const errorMessage = err.message || getStatusText(INTERNAL_SERVER_ERROR)
     let errors = null
     if (err.errors) {
         errors = err.errors
-    } else {
-        errors = {
-            error: getStatusText(statusCode)
-        }
     }
-    res.status(statusCode).json({ status: statusCode, errors })
+    res.status(statusCode).json({ status: statusCode, message: errorMessage, errors })
 }
 
 export const handleNotFound = (req: Request, res: Response) => {
-    res.status(NOT_FOUND).json({ status: NOT_FOUND, errors: [{ error: getStatusText(NOT_FOUND) }] })
+    const statusCode = NOT_FOUND
+    const errorMessage = getStatusText(statusCode)
+    res.status(statusCode).json({ status: statusCode, message: errorMessage })
 }

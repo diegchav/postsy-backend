@@ -25,8 +25,8 @@ if (process.env.NODE_ENV === 'development') {
 app.use(BASE_PATH, new BaseRouter().router)
 
 /* Error handlers */
+app.use(middleware.handleMongoValidationError)
 app.use(middleware.logErrors)
-app.use(middleware.handleValidationError)
 app.use(middleware.handleError)
 app.use(middleware.handleNotFound)
 

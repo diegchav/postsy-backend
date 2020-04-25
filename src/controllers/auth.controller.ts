@@ -1,13 +1,15 @@
 import { Request, Response, NextFunction } from 'express'
 import { body, validationResult } from 'express-validator'
-import { BAD_REQUEST, OK } from 'http-status-codes'
+import { OK } from 'http-status-codes'
 import bcrypt from 'bcrypt'
 
 import AuthService from '../services/auth.service'
 import UserService from '../services/user.service'
 
+import ValidationException from '../exceptions/validation-exception'
+import AuthenticationException from '../exceptions/authentication-exception'
+
 import { toJsonError } from '../common/util'
-import HttpException from '../common/http-exception'
 import logger from '../common/logger'
 
 class AuthController {
@@ -18,8 +20,8 @@ class AuthController {
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
             const validationErrors = errors.array().map(e => toJsonError(e))
-            const httpError = new HttpException(BAD_REQUEST, 'Validation Error', validationErrors)
-            return next(httpError)
+            const validationException = new ValidationException(validationErrors)
+            return next(validationException)
         }
 
         next()
@@ -46,7 +48,7 @@ class AuthController {
         const userFields = {...req.body}
         const createdUser = await this.userService.create(userFields)
         const { email, username } = createdUser
-        logger.info(`Created user: { email: ${email}, username: ${username}}`)
+        logger.info(`User signed up: { email: ${email}, username: ${username}}`)
         res.json({ status: OK, user: { email, username } })
     }
 
@@ -65,19 +67,16 @@ class AuthController {
         if (user) {
             const isUser = await bcrypt.compare(password, user.password)
             if (isUser) {
+                logger.info(`User signed in: { username: ${user.username} }`)
                 const payload = { username: user.username }
                 const token = await this.authService.createToken(payload)
                 res.cookie('jwt', token, { httpOnly: true })
                 return res.json({ status: OK, token })
             } else {
-                const errors = [{ error: 'Invalid username or password' }]
-                const httpError = new HttpException(BAD_REQUEST, 'Authentication Error', errors)
-                throw httpError
+                throw new AuthenticationException()
             }
         } else {
-            const errors = [{ error: 'Invalid username or password' }]
-            const httpError = new HttpException(BAD_REQUEST, 'Authentication Error', errors)
-            throw httpError
+            throw new AuthenticationException()
         }
     }
 }
