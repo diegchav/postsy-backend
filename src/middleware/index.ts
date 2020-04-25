@@ -20,7 +20,7 @@ export const logErrors = (err: HttpException, req: Request, res: Response, next:
  * Handle validation errors thrown by Mongo in case there is an index collision. 
  */
 export const handleValidationError = (err: MongoError, req: Request, res: Response, next: NextFunction) => {
-    if (err.name !== 'MongoError') next(err)
+    if (err.name !== 'MongoError') return next(err)
 
     let keyError = 'error'
     let valueError = getStatusText(BAD_REQUEST)
