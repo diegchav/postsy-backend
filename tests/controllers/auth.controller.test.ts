@@ -104,8 +104,8 @@ describe('AuthController', () => {
                 .expect(OK)
                 .expect('Content-Type', /json/)
 
-            expect(res.body.user.username).toBe(userValid.username.toLowerCase())
-            expect(res.body.user.email).toBe(userValid.email)
+            expect(res.body.user.username).toEqual(userValid.username.toLowerCase())
+            expect(res.body.user.email).toEqual(userValid.email)
         })
 
         /**
@@ -117,7 +117,11 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
+            expect(res.body.message).toEqual('Validation Error')
             expect(res.body.errors).toBeInstanceOf(Array)
+            expect(res.body.errors).toHaveLength(1)
+            const resError = res.body.errors[0]
+            expect(resError.username).toEqual('Username is already taken')
         })
 
         /**
@@ -129,7 +133,11 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
             
+            expect(res.body.message).toEqual('Validation Error')
             expect(res.body.errors).toBeInstanceOf(Array)
+            expect(res.body.errors).toHaveLength(1)
+            const resError = res.body.errors[0]
+            expect(resError.email).toEqual('Email is already taken')
         })
 
         /**
@@ -141,7 +149,11 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
             
+            expect(res.body.message).toEqual('Validation Error')
             expect(res.body.errors).toBeInstanceOf(Array)
+            expect(res.body.errors).toHaveLength(1)
+            const resError = res.body.errors[0]
+            expect(resError.username).toEqual('Username is required')
         })
 
         /**
@@ -153,7 +165,11 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
             
+            expect(res.body.message).toEqual('Validation Error')
             expect(res.body.errors).toBeInstanceOf(Array)
+            expect(res.body.errors).toHaveLength(1)
+            const resError = res.body.errors[0]
+            expect(resError.password).toEqual('Password is required')
         })
 
         /**
@@ -165,7 +181,11 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
+            expect(res.body.message).toEqual('Validation Error')
             expect(res.body.errors).toBeInstanceOf(Array)
+            expect(res.body.errors).toHaveLength(1)
+            const resError = res.body.errors[0]
+            expect(resError.email).toEqual('Email is required')
         })
 
         /**
@@ -177,7 +197,11 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
+            expect(res.body.message).toEqual('Validation Error')
             expect(res.body.errors).toBeInstanceOf(Array)
+            expect(res.body.errors).toHaveLength(1)
+            const resError = res.body.errors[0]
+            expect(resError.username).toEqual('Username must be at least 3 characters')
         })
 
         /**
@@ -189,7 +213,11 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
+            expect(res.body.message).toEqual('Validation Error')
             expect(res.body.errors).toBeInstanceOf(Array)
+            expect(res.body.errors).toHaveLength(1)
+            const resError = res.body.errors[0]
+            expect(resError.username).toEqual('Username must be less than 16 characters')
         })
 
         /**
@@ -201,7 +229,11 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
+            expect(res.body.message).toEqual('Validation Error')
             expect(res.body.errors).toBeInstanceOf(Array)
+            expect(res.body.errors).toHaveLength(1)
+            const resError = res.body.errors[0]
+            expect(resError.password).toEqual('Password must be at least 8 characters')
         })
 
         /**
@@ -213,7 +245,11 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
+            expect(res.body.message).toEqual('Validation Error')
             expect(res.body.errors).toBeInstanceOf(Array)
+            expect(res.body.errors).toHaveLength(1)
+            const resError = res.body.errors[0]
+            expect(resError.email).toEqual('Email is not valid')
         })
     })
 
@@ -251,9 +287,10 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
+            expect(res.body.message).toEqual('Authentication Error')
             expect(res.body.errors).toBeInstanceOf(Array)
+            expect(res.body.errors).toHaveLength(1)
             const resError = res.body.errors[0]
-            expect(resError).toBeDefined()
             expect(resError.error).toEqual('Invalid username or password')
         })
 
@@ -268,9 +305,10 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
+            expect(res.body.message).toEqual('Authentication Error')
             expect(res.body.errors).toBeInstanceOf(Array)
+            expect(res.body.errors).toHaveLength(1)
             const resError = res.body.errors[0]
-            expect(resError).toBeDefined()
             expect(resError.error).toEqual('Invalid username or password')
         })
 
@@ -284,7 +322,11 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
+            expect(res.body.message).toEqual('Validation Error')
             expect(res.body.errors).toBeInstanceOf(Array)
+            expect(res.body.errors).toHaveLength(1)
+            const resError = res.body.errors[0]
+            expect(resError.email).toEqual('Email is required')
         })
 
         /**
@@ -297,7 +339,11 @@ describe('AuthController', () => {
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
+            expect(res.body.message).toEqual('Validation Error')
             expect(res.body.errors).toBeInstanceOf(Array)
+            expect(res.body.errors).toHaveLength(1)
+            const resError = res.body.errors[0]
+            expect(resError.password).toEqual('Password is required')
         })
     })
 })
