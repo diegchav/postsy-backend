@@ -88,7 +88,7 @@ afterAll(async () => {
  * UserService test suite.
  */
 describe('UserService', () => {
-    describe('user sign up', () => {
+    describe('user create', () => {
         /**
          * Test that a user with valid requirements can be created.
          */
@@ -168,6 +168,19 @@ describe('UserService', () => {
          */
         it('should fail if password length is less than required', async () => {
             await expect(userService.create(userInvalidPasswordMinLength)).rejects.toThrow(mongoose.Error)
+        })
+    })
+
+    describe('user find by email', () => {
+        /**
+         * Test user can be found with a valid email.
+         */
+        it('should find an existing user through its email', async () => {
+            const createdUser = await userService.create(user)
+            const { email } = createdUser
+            const foundUser = await userService.findByEmail(email)
+            expect(foundUser).toBeTruthy()
+            expect(foundUser?.email).toEqual(email)
         })
     })
 })

@@ -1,5 +1,6 @@
 import request from 'supertest'
 import { BAD_REQUEST, OK } from 'http-status-codes'
+import setCookie from 'set-cookie-parser'
 
 import app from '../../src/server'
 import DBHandler from '../db-handler'
@@ -209,6 +210,90 @@ describe('AuthController', () => {
         it('should fail if email is invalid', async () => {
             const res = await request(app).post(apiPath + '/signup')
                 .send(userInvalidEmail)
+                .expect(BAD_REQUEST)
+                .expect('Content-Type', /json/)
+
+            expect(res.body.errors).toBeInstanceOf(Array)
+        })
+    })
+
+    describe('POST /signin', () => {
+        /**
+         * Test that a user can sign in.
+         */
+        it('should sign in a user', async () => {
+            // Sign up before signing in
+            await request(app).post(apiPath + '/signup').send(userValid)
+            const payload = { email: userValid.email, password: userValid.password }
+            const res = await request(app).post(apiPath + '/signin')
+                .send(payload)
+                .expect(OK)
+                .expect('Content-Type', /json/)
+
+            expect(typeof res.body.token).toEqual('string')
+
+            const cookies = setCookie.parse(res.header['set-cookie'])
+            expect(cookies).toHaveLength(1)
+            const jwtCookie = cookies[0]
+            expect(jwtCookie.name).toEqual('jwt')
+            expect(jwtCookie.httpOnly).toBe(true)
+            expect(typeof jwtCookie.value).toEqual('string')
+        })
+
+        /**
+         * Test sign in fails if user with a given email doesn't exist.
+         */
+        it(`should fail if user with a given email doesn't exist`, async () => {
+            await request(app).post(apiPath + '/signup').send(userValid)
+            const payload = { email: 'test@example.com', password: 'password' }
+            const res = await request(app).post(apiPath + '/signin')
+                .send(payload)
+                .expect(BAD_REQUEST)
+                .expect('Content-Type', /json/)
+
+            expect(res.body.errors).toBeInstanceOf(Array)
+            const resError = res.body.errors[0]
+            expect(resError).toBeDefined()
+            expect(resError.error).toEqual('Invalid username or password')
+        })
+
+        /**
+         * Test sign fails is provided password is incorrect.
+         */
+        it('should fail is provided password is incorrect', async () => {
+            await request(app).post(apiPath + '/signup').send(userValid)
+            const payload = { email: userValid.email, password: 'password' }
+            const res = await request(app).post(apiPath + '/signin')
+                .send(payload)
+                .expect(BAD_REQUEST)
+                .expect('Content-Type', /json/)
+
+            expect(res.body.errors).toBeInstanceOf(Array)
+            const resError = res.body.errors[0]
+            expect(resError).toBeDefined()
+            expect(resError.error).toEqual('Invalid username or password')
+        })
+
+        /**
+         * Test sign in fails if email is missing.
+         */
+        it('should fail is email is missing', async () => {
+            const payload = { password: userValid.password }
+            const res = await request(app).post(apiPath + '/signin')
+                .send(payload)
+                .expect(BAD_REQUEST)
+                .expect('Content-Type', /json/)
+
+            expect(res.body.errors).toBeInstanceOf(Array)
+        })
+
+        /**
+         * Test sign in fails if password is missing.
+         */
+        it('should fail if password is missing', async () => {
+            const payload = { email: userValid.email }
+            const res = await request(app).post(apiPath + '/signin')
+                .send(payload)
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
