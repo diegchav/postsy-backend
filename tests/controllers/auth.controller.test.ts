@@ -291,7 +291,7 @@ describe('AuthController', () => {
             expect(res.body.errors).toBeInstanceOf(Array)
             expect(res.body.errors).toHaveLength(1)
             const resError = res.body.errors[0]
-            expect(resError.error).toEqual('Invalid username or password')
+            expect(resError.error).toEqual('Invalid email or password')
         })
 
         /**
@@ -309,7 +309,7 @@ describe('AuthController', () => {
             expect(res.body.errors).toBeInstanceOf(Array)
             expect(res.body.errors).toHaveLength(1)
             const resError = res.body.errors[0]
-            expect(resError.error).toEqual('Invalid username or password')
+            expect(resError.error).toEqual('Invalid email or password')
         })
 
         /**

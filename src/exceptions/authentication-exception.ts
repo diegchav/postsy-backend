@@ -4,6 +4,6 @@ import HttpException from './http-exception'
 
 export default class AuthenticationException extends HttpException {
     constructor() {
-        super(BAD_REQUEST, 'Authentication Error', [{ error: 'Invalid username or password' }])
+        super(BAD_REQUEST, 'Authentication Error', [{ error: 'Invalid email or password' }])
     }
 }
