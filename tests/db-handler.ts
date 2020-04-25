@@ -2,7 +2,14 @@ import mongoose from 'mongoose'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 
 class DBHandler {
-    private mongod = new MongoMemoryServer()
+    private mongod = new MongoMemoryServer({
+        instance: {
+            storageEngine: 'wiredTiger'
+        },
+        binary: {
+            version: '4.2.5'
+        }
+    })
     
     /**
      * Connect to the in-memory database.
