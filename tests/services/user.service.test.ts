@@ -70,14 +70,6 @@ beforeAll(async () => {
 })
 
 /**
- * Clear all db data before each test.
- */
-afterEach(async () => {
-    await dbHandler.clearDatabase()
-    await dbHandler.dropIndexes()
-})
-
-/**
  * Remove and close the db.
  */
 afterAll(async () => {
@@ -94,25 +86,17 @@ describe('UserService', () => {
          */
         it('should create a user', async () => {
             expect(async () => {
-                await userService.create(user)
+                const createdUser = await userService.create(user)
+                expect(createdUser.username).toEqual(user.username.toLocaleLowerCase())
             })
             .not
             .toThrow()
         })
 
         /**
-         * Test that a user's username is saved in lower case.
-         */
-        it(`should save user's username in lower case`, async () => {
-            const createdUser = await userService.create(user)
-            expect(createdUser.username).toEqual(user.username.toLowerCase())
-        })
-
-        /**
          * Test that usernames are unique.
          */
         it('should fail if a username already exists', async () => {
-            await userService.create(user)
             expect(async () => {
                 await expect(userService.create(userExistingUsername)).toThrow(MongoError)
             })
@@ -122,7 +106,6 @@ describe('UserService', () => {
          * Test that emails are unique.
          */
         it('should fail if an email already exists', async () => {
-            await userService.create(user)
             expect(async () => {
                 await expect(userService.create(userExistingEmail)).toThrow(MongoError)
             })
@@ -176,7 +159,8 @@ describe('UserService', () => {
          * Test user can be found with a valid email.
          */
         it('should find an existing user through its email', async () => {
-            const createdUser = await userService.create(user)
+            const testUser = { username: 'test', email: 'test@example.com', password: 'password' }
+            const createdUser = await userService.create(testUser)
             const { email } = createdUser
             const foundUser = await userService.findByEmail(email)
             expect(foundUser).toBeTruthy()

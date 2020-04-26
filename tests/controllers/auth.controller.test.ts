@@ -127,7 +127,7 @@ describe('AuthController', () => {
         /**
          * Test sign up fails if email already exists.
          */
-        it('should fail is email already exists', async () => {
+        it('should fail if email already exists', async () => {
             await request(app).post(apiPath + '/signup').send(userValid)
             const res = await request(app).post(apiPath + '/signup').send(userExistingEmail)
                 .expect(BAD_REQUEST)

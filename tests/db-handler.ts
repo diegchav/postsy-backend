@@ -25,6 +25,13 @@ class DBHandler {
     
         await mongoose.connect(uri, options)
     }
+
+    /**
+     * Disconnect the in-memory database.
+     */
+    disconnect = async () => {
+        await mongoose.connection.close()
+    }
     
     /**
      * Drop database, close the connection and stop mongod.
@@ -55,6 +62,14 @@ class DBHandler {
             const collection = collections[key]
             await collection.dropIndexes()
         }
+    }
+
+    /**
+     * Get collection given a name.
+     */
+    getCollection = (name: string) => {
+        const collection = mongoose.connection.collection(name)
+        return collection
     }
 }
 
