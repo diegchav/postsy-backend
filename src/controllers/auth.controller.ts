@@ -70,7 +70,6 @@ class AuthController {
                 logger.info(`User signed in: { username: ${user.username} }`)
                 const payload = { username: user.username }
                 const token = await this.authService.createToken(payload)
-                res.cookie('jwt', token, { httpOnly: true })
                 return res.json({ status: OK, token })
             } else {
                 throw new AuthenticationException()
