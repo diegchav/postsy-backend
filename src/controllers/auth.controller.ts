@@ -68,9 +68,9 @@ class AuthController {
             const isUser = await bcrypt.compare(password, user.password)
             if (isUser) {
                 logger.info(`User signed in: { username: ${user.username} }`)
-                const payload = { username: user.username }
+                const payload = { username: user._id }
                 const token = await this.authService.createToken(payload)
-                return res.json({ status: OK, token })
+                return res.json({ status: OK, user: user.username, token })
             } else {
                 throw new AuthenticationException()
             }
