@@ -48,6 +48,10 @@ export const handleError = (err: HttpException, req: Request, res: Response, nex
     let errors = null
     if (err.errors) {
         errors = err.errors
+    } else {
+        errors = [{
+            error: getStatusText(statusCode)
+        }]
     }
     res.status(statusCode).json({ status: statusCode, message: errorMessage, errors })
 }

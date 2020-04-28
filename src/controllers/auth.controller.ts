@@ -16,14 +16,26 @@ class AuthController {
     private authService = new AuthService()
     private userService = new UserService()
 
-    validate = (req: Request, res: Response, next: NextFunction) => {
+    validateUser = async (req: any, res: Response, next: NextFunction) => {
+        let jwt = req.headers.authorization || ''
+        jwt = jwt?.replace(/^Bearer /i, '')
+        try {
+            const _id = await this.authService.verifyToken(jwt)
+            const user = await this.userService.verifyUser(_id)
+            req.user = user
+            return next()
+        } catch (err) {
+            return next(err)
+        }
+    }
+
+    validateRequest = (req: Request, res: Response, next: NextFunction) => {
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
             const validationErrors = errors.array().map(e => toJsonError(e))
             const validationException = new ValidationException(validationErrors)
             return next(validationException)
         }
-
         next()
     }
 
@@ -68,7 +80,7 @@ class AuthController {
             const isUser = await bcrypt.compare(password, user.password)
             if (isUser) {
                 logger.info(`User signed in: { username: ${user.username} }`)
-                const payload = { username: user._id }
+                const payload = { _id: user._id }
                 const token = await this.authService.createToken(payload)
                 return res.json({ status: OK, user: user.username, token })
             } else {

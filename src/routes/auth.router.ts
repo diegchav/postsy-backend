@@ -16,12 +16,12 @@ class AuthRouter {
     private initializeRoutes() {
         this._router.post('/signup',
             this.authController.signUpValidation,
-            this.authController.validate,
+            this.authController.validateRequest,
             autoCatch(this.authController.signUp))
 
         this._router.post('/signin',
             this.authController.signInValidation,
-            this.authController.validate,
+            this.authController.validateRequest,
             autoCatch(this.authController.signIn))
     }
 

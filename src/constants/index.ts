@@ -3,6 +3,7 @@
  */
 export const BASE_PATH = '/api'
 export const AUTH_PATH = '/auth'
+export const POSTS_PATH = '/posts'
 
 /**
  * Mongo error codes.
