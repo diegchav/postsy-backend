@@ -31,7 +31,6 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.9",
     "morgan": "^1.10.0",
-    "set-cookie-parser": "^2.4.5",
     "winston": "^3.2.1"
   },
   "devDependencies": {
@@ -48,7 +47,6 @@
     "@types/mongoose": "^5.7.12",
     "@types/morgan": "^1.9.0",
     "@types/node": "^13.13.0",
-    "@types/set-cookie-parser": "0.0.6",
     "@types/supertest": "^2.0.8",
     "@typescript-eslint/eslint-plugin": "^2.28.0",
     "@typescript-eslint/parser": "^2.28.0",

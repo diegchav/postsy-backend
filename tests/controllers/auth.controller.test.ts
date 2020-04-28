@@ -1,6 +1,5 @@
 import request from 'supertest'
 import { BAD_REQUEST, OK } from 'http-status-codes'
-import setCookie from 'set-cookie-parser'
 
 import app from '../../src/server'
 import DBHandler from '../db-handler'
@@ -266,14 +265,8 @@ describe('AuthController', () => {
                 .expect(OK)
                 .expect('Content-Type', /json/)
 
+            expect(res.body.user).toEqual(userValid.username.toLowerCase())
             expect(typeof res.body.token).toEqual('string')
-
-            const cookies = setCookie.parse(res.header['set-cookie'])
-            expect(cookies).toHaveLength(1)
-            const jwtCookie = cookies[0]
-            expect(jwtCookie.name).toEqual('jwt')
-            expect(jwtCookie.httpOnly).toBe(true)
-            expect(typeof jwtCookie.value).toEqual('string')
         })
 
         /**
