@@ -4,7 +4,7 @@ import logger from '../common/logger'
 
 class PostService {
     getAll = async () => {
-        const posts = await PostModel.find().populate('user', '-email')
+        const posts = await PostModel.find().populate('user', '-email').sort({ createdAt: -1 })
         return posts
     }
 
