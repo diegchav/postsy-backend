@@ -1,11 +1,10 @@
 import { PostModel } from '../models/post.model'
-import { User } from '../models/user.model'
 
 import logger from '../common/logger'
 
 class PostService {
     getAll = async () => {
-        const posts = await PostModel.find()
+        const posts = await PostModel.find().populate('user')
         return posts
     }
 

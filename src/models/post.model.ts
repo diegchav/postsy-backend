@@ -4,10 +4,14 @@ import { User } from './user.model'
 
 @modelOptions({
     schemaOptions: {
+        toObject: {
+            transform: (doc, ret, options) => {
+                delete ret.__v
+            }
+        },
         toJSON: {
             transform: (doc, ret, options) => {
                 delete ret.__v
-                return ret
             }
         }
     }
