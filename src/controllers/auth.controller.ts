@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { body } from 'express-validator'
-import { OK } from 'http-status-codes'
+import { OK, getStatusText } from 'http-status-codes'
 import bcrypt from 'bcrypt'
 
 import AuthService from '../services/auth.service'
@@ -49,7 +49,7 @@ class AuthController {
         const createdUser = await this.userService.create(userFields)
         const { email, username } = createdUser
         logger.info(`User signed up: { email: ${email}, username: ${username}}`)
-        res.json({ status: OK, user: { email, username } })
+        res.json({ status: OK, message: getStatusText(OK) })
     }
 
     signInValidation = [
