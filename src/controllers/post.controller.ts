@@ -8,7 +8,8 @@ class PostController {
     private postService = new PostService()
 
     getAll = async (req: any, res: Response) => {
-        const posts = await this.postService.getAll()
+        const { _id } = req.user
+        const posts = await this.postService.getAll(_id)
         res.status(OK).json({ status: OK, posts })
     }
 

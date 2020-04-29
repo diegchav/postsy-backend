@@ -3,8 +3,11 @@ import { PostModel } from '../models/post.model'
 import logger from '../common/logger'
 
 class PostService {
-    getAll = async () => {
-        const posts = await PostModel.find().populate('user', '-email').sort({ createdAt: -1 })
+    getAll = async (userId: string) => {
+        const posts = await PostModel
+            .find({ user: userId })
+            .populate('user', '-email')
+            .sort({ createdAt: -1 })
         return posts
     }
 
