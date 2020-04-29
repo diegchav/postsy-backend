@@ -1,7 +1,26 @@
-import { pre, prop, getModelForClass } from '@typegoose/typegoose'
+import { modelOptions, pre, prop, getModelForClass } from '@typegoose/typegoose'
 import bcrypt from 'bcrypt'
 
 const saltRounds = bcrypt.genSaltSync(Number(process.env.SALT_ROUNDS) || 10)
+
+@modelOptions({
+    schemaOptions: {
+        toObject: {
+            transform: (doc, ret, options) => {
+                delete ret.password
+                delete ret.createdAt
+                delete ret.__v
+            }
+        },
+        toJSON: {
+            transform: (doc, ret, options) => {
+                delete ret.password
+                delete ret.createdAt
+                delete ret.__v
+            }
+        }
+    }
+})
 
 @pre<User>('save', async function() {
     this.password = await bcrypt.hash(this.password, saltRounds)
