@@ -1,17 +1,13 @@
-import { prop, getModelForClass } from '@typegoose/typegoose'
-import cuid from 'cuid'
+import { prop, getModelForClass, Ref } from '@typegoose/typegoose'
 
 import { User } from './user.model'
 
 export class Post {
-    @prop({ default: cuid })
-    public _id?: string
-
     @prop({ required: true })
     public text!: string
 
-    @prop({ required: true })
-    public user!: User
+    @prop({ required: true, ref: 'User' })
+    public user!: Ref<User>
 
     @prop({ default: Date.now })
     public createdAt?: Date

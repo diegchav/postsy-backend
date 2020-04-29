@@ -6,9 +6,9 @@ class UserService {
     create = async (userFields: any) => {
         const { username, password, email } = userFields
         const user = await UserModel.create({
-            username: username,
-            password: password,
-            email: email
+            username,
+            password,
+            email
         } as User)
         return user
     }

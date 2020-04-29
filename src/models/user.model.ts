@@ -1,6 +1,5 @@
 import { pre, prop, getModelForClass } from '@typegoose/typegoose'
 import bcrypt from 'bcrypt'
-import cuid from 'cuid'
 
 const saltRounds = bcrypt.genSaltSync(Number(process.env.SALT_ROUNDS) || 10)
 
@@ -9,9 +8,6 @@ const saltRounds = bcrypt.genSaltSync(Number(process.env.SALT_ROUNDS) || 10)
 })
 
 export class User {
-    @prop({ default: cuid })
-    public _id?: string
-
     @prop({
         required: true,
         unique: true,

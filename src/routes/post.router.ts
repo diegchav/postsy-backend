@@ -4,6 +4,7 @@ import AuthController from '../controllers/auth.controller'
 import PostController from '../controllers/post.controller'
 
 import autoCatch from '../common/auto-catch'
+import { validateRequest } from '../middleware'
 
 class PostRouter {
     private authController = new AuthController()
@@ -19,6 +20,11 @@ class PostRouter {
         this._router.get('/',
             this.authController.validateUser,
             autoCatch(this.postController.getAll))
+        this._router.post('/',
+            this.authController.validateUser,
+            this.postController.createPostValidation,
+            validateRequest,
+            autoCatch(this.postController.create))
     }
 
     get router() {

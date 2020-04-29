@@ -3,6 +3,7 @@ import express from 'express'
 import AuthController from '../controllers/auth.controller'
 
 import autoCatch from '../common/auto-catch'
+import { validateRequest } from '../middleware'
 
 class AuthRouter {
     private authController = new AuthController()
@@ -16,12 +17,12 @@ class AuthRouter {
     private initializeRoutes() {
         this._router.post('/signup',
             this.authController.signUpValidation,
-            this.authController.validateRequest,
+            validateRequest,
             autoCatch(this.authController.signUp))
 
         this._router.post('/signin',
             this.authController.signInValidation,
-            this.authController.validateRequest,
+            validateRequest,
             autoCatch(this.authController.signIn))
     }
 

@@ -1,15 +1,13 @@
 import { Request, Response, NextFunction } from 'express'
-import { body, validationResult } from 'express-validator'
+import { body } from 'express-validator'
 import { OK } from 'http-status-codes'
 import bcrypt from 'bcrypt'
 
 import AuthService from '../services/auth.service'
 import UserService from '../services/user.service'
 
-import ValidationException from '../exceptions/validation-exception'
 import AuthenticationException from '../exceptions/authentication-exception'
 
-import { toJsonError } from '../common/util'
 import logger from '../common/logger'
 
 class AuthController {
@@ -27,16 +25,6 @@ class AuthController {
         } catch (err) {
             return next(err)
         }
-    }
-
-    validateRequest = (req: Request, res: Response, next: NextFunction) => {
-        const errors = validationResult(req)
-        if (!errors.isEmpty()) {
-            const validationErrors = errors.array().map(e => toJsonError(e))
-            const validationException = new ValidationException(validationErrors)
-            return next(validationException)
-        }
-        next()
     }
 
     signUpValidation = [
