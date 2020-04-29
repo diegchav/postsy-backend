@@ -1,6 +1,17 @@
-import { prop, getModelForClass, Ref } from '@typegoose/typegoose'
+import { modelOptions, prop, getModelForClass, Ref } from '@typegoose/typegoose'
 
 import { User } from './user.model'
+
+@modelOptions({
+    schemaOptions: {
+        toJSON: {
+            transform: (doc, ret, options) => {
+                delete ret.__v
+                return ret
+            }
+        }
+    }
+})
 
 export class Post {
     @prop({ required: true })
