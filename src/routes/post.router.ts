@@ -1,10 +1,16 @@
 import { Router } from 'express'
+import path from 'path'
+import multer from 'multer'
 
 import AuthController from '../controllers/auth.controller'
 import PostController from '../controllers/post.controller'
 
 import autoCatch from '../common/auto-catch'
 import { validateRequest } from '../middleware'
+
+import { UPLOADS_DIR } from '../constants'
+
+const upload = multer({ dest: UPLOADS_DIR })
 
 class PostRouter {
     private authController = new AuthController()
@@ -22,6 +28,7 @@ class PostRouter {
             autoCatch(this.postController.getAll))
         this._router.post('/',
             this.authController.validateUser,
+            upload.single('imageFile'),
             this.postController.createPostValidation,
             validateRequest,
             autoCatch(this.postController.create))

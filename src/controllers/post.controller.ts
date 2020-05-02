@@ -1,4 +1,5 @@
 import { Response } from 'express'
+import url from 'url'
 import { body } from 'express-validator'
 import { OK, CREATED, getStatusText } from 'http-status-codes'
 
@@ -19,9 +20,12 @@ class PostController {
     ]
 
     create = async (req: any, res: Response) => {
-        const { text } = req.body
         const { _id } = req.user
-        await this.postService.create(text, _id)
+        const serverUrl = url.format({ protocol: req.protocol, host: req.get('host') })
+        const { text } = req.body
+        let imageUrl = ''
+        if (req.file) imageUrl = `${serverUrl}/uploads/${req.file.filename}`
+        await this.postService.create(_id, text, imageUrl)
         res.status(CREATED).json({ status: CREATED, message: getStatusText(CREATED) })
     }
 

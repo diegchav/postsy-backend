@@ -11,9 +11,10 @@ class PostService {
         return posts
     }
 
-    create = async (text: string, userId: string) => {
+    create = async (userId: string, text: string, imageUrl: string) => {
         const { _id } = await PostModel.create({
             text,
+            imageUrl,
             user: userId
         })
         logger.info(`Created post: ${_id}`)

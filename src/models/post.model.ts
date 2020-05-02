@@ -21,6 +21,9 @@ export class Post {
     @prop({ required: true })
     public text!: string
 
+    @prop()
+    public imageUrl?: string
+
     @prop({ required: true, ref: 'User' })
     public user!: Ref<User>
 
