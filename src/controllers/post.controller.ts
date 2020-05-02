@@ -24,6 +24,12 @@ class PostController {
         await this.postService.create(text, _id)
         res.status(CREATED).json({ status: CREATED, message: getStatusText(CREATED) })
     }
+
+    delete = async (req: any, res: Response) => {
+        const { id } = req.params
+        await this.postService.delete(id)
+        res.status(OK).json({ status: OK, message: getStatusText(OK) })
+    }
 }
 
 export default PostController

@@ -18,6 +18,11 @@ class PostService {
         })
         logger.info(`Created post: ${_id}`)
     }
+
+    delete = async (id: string) => {
+        await PostModel.deleteOne({ _id: id })
+        logger.info(`Deleted post: ${id}`)
+    }
 }
 
 export default PostService
