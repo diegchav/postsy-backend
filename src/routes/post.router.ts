@@ -10,14 +10,14 @@ import autoCatch from '../common/auto-catch'
 import { validateRequest } from '../middleware'
 
 const s3 = new aws.S3({
-    accessKeyId: 'AKIA227T7XOSSPAHPP4J',
-    secretAccessKey: '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'
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_KEY
 })
 
 const upload = multer({
     storage: multerS3({
         s3,
-        bucket: 'postsybucket',
+        bucket: process.env.AWS_BUCKET_NAME || '',
         acl: 'public-read',
         key: function(req, file, cb) {
             cb(null, Date.now().toString())
