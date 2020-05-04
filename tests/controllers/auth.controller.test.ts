@@ -1,5 +1,5 @@
 import request from 'supertest'
-import { BAD_REQUEST, OK } from 'http-status-codes'
+import { BAD_REQUEST, OK, getStatusText } from 'http-status-codes'
 
 import app from '../../src/server'
 import DBHandler from '../db-handler'
@@ -103,8 +103,8 @@ describe('AuthController', () => {
                 .expect(OK)
                 .expect('Content-Type', /json/)
 
-            expect(res.body.user.username).toEqual(userValid.username.toLowerCase())
-            expect(res.body.user.email).toEqual(userValid.email)
+            expect(res.body.status).toEqual(OK)
+            expect(res.body.message).toEqual(getStatusText(OK))
         })
 
         /**

@@ -63,7 +63,7 @@ class AuthController {
 
     signIn = async (req: Request, res: Response) => {
         const { email, password } = req.body
-        const user = await this.userService.findByEmail(email)
+        const user = await this.userService.getByEmail(email)
         if (user) {
             const isUser = await bcrypt.compare(password, user.password)
             if (isUser) {

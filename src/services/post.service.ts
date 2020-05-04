@@ -11,6 +11,11 @@ class PostService {
         return posts
     }
 
+    getById = async (id: string) => {
+        const post = await PostModel.findOne({ _id: id })
+        return post
+    }
+
     create = async (userId: string, text: string, imageUrl: string) => {
         const { _id } = await PostModel.create({
             text,

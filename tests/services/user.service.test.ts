@@ -162,7 +162,7 @@ describe('UserService', () => {
             const testUser = { username: 'test', email: 'test@example.com', password: 'password' }
             const createdUser = await userService.create(testUser)
             const { email } = createdUser
-            const foundUser = await userService.findByEmail(email)
+            const foundUser = await userService.getByEmail(email)
             expect(foundUser).toBeTruthy()
             expect(foundUser?.email).toEqual(email)
         })

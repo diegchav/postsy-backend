@@ -4,6 +4,8 @@ import { OK, CREATED, getStatusText } from 'http-status-codes'
 
 import PostService from '../services/post.service'
 
+import ForbiddenException from '../exceptions/forbidden-exception'
+
 class PostController {
     private postService = new PostService()
 
@@ -29,6 +31,11 @@ class PostController {
 
     delete = async (req: any, res: Response) => {
         const { id } = req.params
+        const userId = req.user._id
+        const post = await this.postService.getById(id)
+        // Check if the post belongs to the user
+        if (!userId.equals(post?.user)) throw new ForbiddenException()
+
         await this.postService.delete(id)
         res.status(OK).json({ status: OK, message: getStatusText(OK) })
     }

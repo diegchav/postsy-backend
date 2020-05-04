@@ -13,7 +13,7 @@ class UserService {
         return user
     }
 
-    findByEmail = async (email: string) => {
+    getByEmail = async (email: string) => {
         const user = await UserModel.findOne({ email })
         return user
     }
