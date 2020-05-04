@@ -6,6 +6,7 @@ import path from 'path'
 export const BASE_PATH = '/api'
 export const AUTH_PATH = '/auth'
 export const POSTS_PATH = '/posts'
+export const USERS_PATH = '/users'
 
 /**
  * Mongo error codes.
