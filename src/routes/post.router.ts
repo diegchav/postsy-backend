@@ -1,6 +1,7 @@
 import { Router } from 'express'
-import path from 'path'
+import aws from 'aws-sdk'
 import multer from 'multer'
+import multerS3 from 'multer-s3'
 
 import AuthController from '../controllers/auth.controller'
 import PostController from '../controllers/post.controller'
@@ -8,9 +9,24 @@ import PostController from '../controllers/post.controller'
 import autoCatch from '../common/auto-catch'
 import { validateRequest } from '../middleware'
 
-import { UPLOADS_DIR } from '../constants'
+const s3 = new aws.S3({
+    accessKeyId: 'AKIA227T7XOSSPAHPP4J',
+    secretAccessKey: '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'
+})
 
-const upload = multer({ dest: UPLOADS_DIR })
+const upload = multer({
+    storage: multerS3({
+        s3,
+        bucket: 'postsybucket',
+        acl: 'public-read',
+        key: function(req, file, cb) {
+            cb(null, Date.now().toString())
+        }
+    }),
+    limits: {
+        fileSize: 2000000
+    }
+})
 
 class PostRouter {
     private authController = new AuthController()
