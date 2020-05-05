@@ -19,6 +19,9 @@ class UserRouter {
         this._router.get('/',
             this.authController.validateUser,
             autoCatch(this.userController.getAll))
+        this._router.post('/follow/:userId',
+            this.authController.validateUser,
+            autoCatch(this.userController.followUser))
     }
 
     get router() {

@@ -32,6 +32,13 @@ class UserService {
             throw err
         }
     }
+
+    followUser = async (userId: string, userToFollowId: string) => {
+        const user = await UserModel.findOne({ _id: userId })
+        const userToFollow = await UserModel.findOne({ _id: userToFollowId })
+        user?.following.push(userToFollow as User)
+        await user?.save()
+    }
 }
 
 export default UserService

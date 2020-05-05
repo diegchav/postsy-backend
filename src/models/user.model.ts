@@ -1,4 +1,4 @@
-import { modelOptions, pre, prop, getModelForClass } from '@typegoose/typegoose'
+import { modelOptions, pre, prop, arrayProp, Ref, getModelForClass } from '@typegoose/typegoose'
 import bcrypt from 'bcrypt'
 
 const saltRounds = bcrypt.genSaltSync(Number(process.env.SALT_ROUNDS) || 10)
@@ -43,6 +43,9 @@ export class User {
 
     @prop({ required: true, unique: true })
     public email!: string
+
+    @arrayProp({ itemsRef: User })
+    public following!: Ref<User>[]
 
     @prop({ default: Date.now })
     public createdAt?: Date

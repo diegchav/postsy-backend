@@ -24,7 +24,7 @@ export class Post {
     @prop()
     public imageUrl?: string
 
-    @prop({ required: true, ref: 'User' })
+    @prop({ required: true, ref: User })
     public user!: Ref<User>
 
     @prop({ default: Date.now })
