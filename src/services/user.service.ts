@@ -13,8 +13,8 @@ class UserService {
         return user
     }
 
-    getAll = async () => {
-        const users = await UserModel.find()
+    getAll = async (userId: string = '') => {
+        const users = await UserModel.find({ _id: { $ne: userId } })
         return users
     }
 

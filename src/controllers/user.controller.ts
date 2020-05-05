@@ -6,8 +6,9 @@ import UserService from '../services/user.service'
 class UserController {
     private userService = new UserService()
 
-    getAll = async (req: Request, res: Response) => {
-        const users = await this.userService.getAll()
+    getAll = async (req: any, res: Response) => {
+        const { _id } = req.user
+        const users = await this.userService.getAll(_id)
         res.status(OK).json({ status: OK, message: getStatusText(OK), users })
     }
 }
