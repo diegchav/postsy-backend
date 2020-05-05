@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { Response } from 'express'
 import { OK, getStatusText } from 'http-status-codes'
 
 import UserService from '../services/user.service'

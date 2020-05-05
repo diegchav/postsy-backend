@@ -29,13 +29,10 @@ const saltRounds = bcrypt.genSaltSync(Number(process.env.SALT_ROUNDS) || 10)
 export class User {
     @prop({
         required: true,
-        unique: true,
-        lowercase: true,
         trim: true,
-        minlength: 3,
-        maxlength: 16
+        maxlength: 120
     })
-    public username!: string
+    public name!: string
 
     @prop({
         minlength: 8,

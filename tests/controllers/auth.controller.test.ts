@@ -12,58 +12,46 @@ const dbHandler = new DBHandler()
  * Mock data.
  */
 const userValid = {
-    username: 'Alex',
+    name: 'Alex',
     password: 'password1234',
     email: 'alex@example.com'
-}
-
-const userExistingUsername = {
-    username: 'Alex',
-    password: 'password1234',
-    email: 'notalex@example.com'
 }
 
 const userExistingEmail = {
-    username: 'NotAlex',
+    name: 'NotAlex',
     password: 'password1234',
     email: 'alex@example.com'
 }
 
-const userMissingUsername = {
+const userMissingName = {
     password: 'password1234',
     email: 'alex@example.com'
 }
 
 const userMissingPassword = {
-    username: 'Alex',
+    name: 'Alex',
     email: 'alex@example.com'
 }
 
 const userMissingEmail = {
-    username: 'Alex',
+    name: 'Alex',
     password: 'password1234',    
 }
 
-const userInvalidUsernameMinLength = {
-    username: 'Al',
-    password: 'password1234',
-    email: 'alex@example.com'
-}
-
-const userInvalidUsernameMaxLength = {
-    username: 'AlexAlexAlexAlexAlex',
+const userInvalidNameMaxLength = {
+    name: new Array(121).fill('a').join(''),
     password: 'password1234',
     email: 'alex@example.com'
 }
 
 const userInvalidPasswordMinLength = {
-    username: 'Alex',
+    name: 'Alex',
     password: 'pass',
     email: 'alex@example.com'
 }
 
 const userInvalidEmail = {
-    username: 'Alex',
+    name: 'Alex',
     password: 'password1234',
     email: 'alex@example'
 }
@@ -108,22 +96,6 @@ describe('AuthController', () => {
         })
 
         /**
-         * Test sign up fails if username already exists.
-         */
-        it('should fail if username already exists', async () => {
-            await request(app).post(apiPath + '/signup').send(userValid)
-            const res = await request(app).post(apiPath + '/signup').send(userExistingUsername)
-                .expect(BAD_REQUEST)
-                .expect('Content-Type', /json/)
-
-            expect(res.body.message).toEqual('Validation Error')
-            expect(res.body.errors).toBeInstanceOf(Array)
-            expect(res.body.errors).toHaveLength(1)
-            const resError = res.body.errors[0]
-            expect(resError.username).toEqual('Username is already taken')
-        })
-
-        /**
          * Test sign up fails if email already exists.
          */
         it('should fail if email already exists', async () => {
@@ -140,11 +112,11 @@ describe('AuthController', () => {
         })
 
         /**
-         * Test sign up fails if username is missing.
+         * Test sign up fails if name is missing.
          */
-        it('should fail if username is missing', async () => {
+        it('should fail if name is missing', async () => {
             const res = await request(app).post(apiPath + '/signup')
-                .send(userMissingUsername)
+                .send(userMissingName)
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
             
@@ -152,7 +124,7 @@ describe('AuthController', () => {
             expect(res.body.errors).toBeInstanceOf(Array)
             expect(res.body.errors).toHaveLength(1)
             const resError = res.body.errors[0]
-            expect(resError.username).toEqual('Username is required')
+            expect(resError.name).toEqual('Name is required')
         })
 
         /**
@@ -188,11 +160,11 @@ describe('AuthController', () => {
         })
 
         /**
-         * Test sign up fails if username length is less than required.
+         * Test sign up fails if name length is greater than required.
          */
-        it('should fail if username length is less than required', async () => {
+        it('should fail if name length is greater than required', async () => {
             const res = await request(app).post(apiPath + '/signup')
-                .send(userInvalidUsernameMinLength)
+                .send(userInvalidNameMaxLength)
                 .expect(BAD_REQUEST)
                 .expect('Content-Type', /json/)
 
@@ -200,23 +172,7 @@ describe('AuthController', () => {
             expect(res.body.errors).toBeInstanceOf(Array)
             expect(res.body.errors).toHaveLength(1)
             const resError = res.body.errors[0]
-            expect(resError.username).toEqual('Username must be at least 3 characters')
-        })
-
-        /**
-         * Test sign up fails if username length is greater than required.
-         */
-        it('should fail if username length is greater than required', async () => {
-            const res = await request(app).post(apiPath + '/signup')
-                .send(userInvalidUsernameMaxLength)
-                .expect(BAD_REQUEST)
-                .expect('Content-Type', /json/)
-
-            expect(res.body.message).toEqual('Validation Error')
-            expect(res.body.errors).toBeInstanceOf(Array)
-            expect(res.body.errors).toHaveLength(1)
-            const resError = res.body.errors[0]
-            expect(resError.username).toEqual('Username must be less than 16 characters')
+            expect(resError.name).toEqual('Name must be at most 120 characters')
         })
 
         /**
@@ -265,7 +221,6 @@ describe('AuthController', () => {
                 .expect(OK)
                 .expect('Content-Type', /json/)
 
-            expect(res.body.user).toEqual(userValid.username.toLowerCase())
             expect(typeof res.body.token).toEqual('string')
         })
 

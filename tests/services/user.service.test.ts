@@ -12,52 +12,40 @@ const userService = new UserService()
  * Mock data.
  */
 const user = {
-    username: 'Alex',
+    name: 'Alex',
     password: 'password1234',
     email: 'alex@example.com'
-}
-
-const userExistingUsername = {
-    username: 'Alex',
-    password: 'password1234',
-    email: 'notalex@example.com'
 }
 
 const userExistingEmail = {
-    username: 'NotAlex',
+    name: 'NotAlex',
     password: 'password1234',
     email: 'alex@example.com'
 }
 
-const userMissingUsername = {
+const userMissingName = {
     password: 'password1234',
     email: 'alex@example.com'
 }
 
 const userMissingPassword = {
-    username: 'Alex',
+    name: 'Alex',
     email: 'alex@example.com'
 }
 
 const userMissingEmail = {
-    username: 'Alex',
+    name: 'Alex',
     password: 'password1234',
 }
 
-const userInvalidUsernameMinLength = {
-    username: 'Al',
-    password: 'password1234',
-    email: 'alex@example.com'
-}
-
-const userInvalidUsernameMaxLength = {
-    username: 'AlexAlexAlexAlexAlex',
+const userInvalidNameMaxLength = {
+    name: new Array(121).fill('a').join(''),
     password: 'password1234',
     email: 'alex@example.com'
 }
 
 const userInvalidPasswordMinLength = {
-    username: 'Alex',
+    name: 'Alex',
     password: 'pass',
     email: 'alex@example.com'    
 }
@@ -86,20 +74,10 @@ describe('UserService', () => {
          */
         it('should create a user', async () => {
             expect(async () => {
-                const createdUser = await userService.create(user)
-                expect(createdUser.username).toEqual(user.username.toLocaleLowerCase())
+                await userService.create(user)
             })
             .not
             .toThrow()
-        })
-
-        /**
-         * Test that usernames are unique.
-         */
-        it('should fail if a username already exists', async () => {
-            expect(async () => {
-                await expect(userService.create(userExistingUsername)).toThrow(MongoError)
-            })
         })
 
         /**
@@ -114,8 +92,8 @@ describe('UserService', () => {
         /**
          * Test user cannot be created if username is missing.
          */
-        it('should fail if username is missing', async () => {
-            await expect(userService.create(userMissingUsername)).rejects.toThrow(mongoose.Error)
+        it('should fail if name is missing', async () => {
+            await expect(userService.create(userMissingName)).rejects.toThrow(mongoose.Error)
         })
 
         /**
@@ -133,17 +111,10 @@ describe('UserService', () => {
         })
 
         /**
-         * Test user cannot be created if username length is less than required.
+         * Test user cannot be created if name length is greater than required.
          */
-        it('should fail if username length is less than required', async () => {
-            await expect(userService.create(userInvalidUsernameMinLength)).rejects.toThrow(mongoose.Error)
-        })
-
-        /**
-         * Test user cannot be created if username length is greater than required.
-         */
-        it('should fail if username length is greater thatn required', async () => {
-            await expect(userService.create(userInvalidUsernameMaxLength)).rejects.toThrow(mongoose.Error)
+        it('should fail if name length is greater thatn required', async () => {
+            await expect(userService.create(userInvalidNameMaxLength)).rejects.toThrow(mongoose.Error)
         })
 
         /**
@@ -159,7 +130,7 @@ describe('UserService', () => {
          * Test user can be found with a valid email.
          */
         it('should find an existing user through its email', async () => {
-            const testUser = { username: 'test', email: 'test@example.com', password: 'password' }
+            const testUser = { name: 'Test', email: 'test@example.com', password: 'password' }
             const createdUser = await userService.create(testUser)
             const { email } = createdUser
             const foundUser = await userService.getByEmail(email)

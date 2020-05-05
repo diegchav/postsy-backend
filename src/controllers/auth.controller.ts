@@ -28,16 +28,13 @@ class AuthController {
     }
 
     signUpValidation = [
-        body('username')
-            .not().isEmpty().withMessage('Username is required').bail()
-            .isAlphanumeric().withMessage('Username contains special characters')
-            .isLength({ min: 3 }).withMessage('Username must be at least 3 characters')
-            .isLength({ max: 16 }).withMessage('Username must be less than 16 characters')
-            .not().matches(/^admin$/i).withMessage('Invalid username'),
+        body('name')
+            .not().isEmpty().withMessage('Name is required').bail()
+            .isLength({ max: 120 }).withMessage('Name must be at most 120 characters'),
         body('password')
             .not().isEmpty().withMessage('Password is required').bail()
             .isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
-            .isLength({ max: 120 }).withMessage('Password must be less than 120 characters'),
+            .isLength({ max: 120 }).withMessage('Password must be at most 120 characters'),
         body('email')
             .not().isEmpty().withMessage('Email is required').bail()
             .isEmail().withMessage('Email is not valid')
@@ -47,9 +44,9 @@ class AuthController {
     signUp = async (req: Request, res: Response) => {
         const userFields = {...req.body}
         const createdUser = await this.userService.create(userFields)
-        const { email, username } = createdUser
-        logger.info(`User signed up: { email: ${email}, username: ${username}}`)
-        res.json({ status: OK, message: getStatusText(OK) })
+        const { email } = createdUser
+        logger.info(`User signed up: { email: ${email} }`)
+        res.json({ status: OK, message: getStatusText(OK), user: createdUser })
     }
 
     signInValidation = [
@@ -67,10 +64,10 @@ class AuthController {
         if (user) {
             const isUser = await bcrypt.compare(password, user.password)
             if (isUser) {
-                logger.info(`User signed in: { username: ${user.username} }`)
+                logger.info(`User signed in: { email: ${user.email} }`)
                 const payload = { _id: user._id }
                 const token = await this.authService.createToken(payload)
-                return res.json({ status: OK, user: user.username, token })
+                return res.json({ status: OK, message: getStatusText(OK), user, token })
             } else {
                 throw new AuthenticationException()
             }

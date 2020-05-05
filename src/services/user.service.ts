@@ -4,9 +4,9 @@ import AuthorizationException from '../exceptions/authorization-exception'
 
 class UserService {
     create = async (userFields: any) => {
-        const { username, password, email } = userFields
+        const { name, password, email } = userFields
         const user = await UserModel.create({
-            username,
+            name,
             password,
             email
         } as User)
