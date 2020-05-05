@@ -34,6 +34,9 @@ class UserService {
     }
 
     followUser = async (userId: string, userToFollowId: string) => {
+        // Prevent users follow themeselves
+        if (userId === userToFollowId) return
+
         const userToFollow = await UserModel.findOne({ _id: userToFollowId })
 
         // Only add user to follow if is not being followed
