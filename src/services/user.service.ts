@@ -14,8 +14,20 @@ class UserService {
     }
 
     getAll = async (userId: string = '') => {
-        const users = await UserModel.find({ _id: { $ne: userId } })
-        return users
+        const currentUser = await UserModel.findOne({ _id: userId })
+        const followedUsers = currentUser?.following || []
+        const followedUsersMap: Map<string, boolean> = new Map<string, boolean>()
+        followedUsers.forEach((user) => followedUsersMap.set(user.toString(), true))
+        const users = await UserModel.find({ _id: { $ne: userId } }).select('-following')
+        const usersResult = users.map((user) => (
+            {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                following: followedUsersMap.has(user._id.toString())
+            }
+        ))
+        return usersResult
     }
 
     getByEmail = async (email: string) => {
