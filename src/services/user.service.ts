@@ -10,7 +10,7 @@ class UserService {
             password,
             email
         } as User)
-        return user
+        return { _id: user._id, name: user.name, email: user.email }
     }
 
     getAll = async (userId: string = '') => {
