@@ -34,10 +34,18 @@ class UserService {
     }
 
     followUser = async (userId: string, userToFollowId: string) => {
-        const user = await UserModel.findOne({ _id: userId })
         const userToFollow = await UserModel.findOne({ _id: userToFollowId })
-        user?.following.push(userToFollow as User)
-        await user?.save()
+
+        // Only add user to follow if is not being followed
+        await UserModel.updateOne(
+            {
+                _id: userId,
+                following: { $nin: [userToFollow as User] }
+            },
+            {
+                $push: { following: userToFollow as User }
+            }
+        )
     }
 }
 
