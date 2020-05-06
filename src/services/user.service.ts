@@ -36,7 +36,8 @@ class UserService {
     }
 
     getByEmail = async (email: string) => {
-        const user = await UserModel.findOne({ email }).select('-following')
+        const user = await UserModel.findOne({ email })
+            .select('-following -followers')
         return user
     }
 
