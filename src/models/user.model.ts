@@ -7,6 +7,7 @@ const saltRounds = bcrypt.genSaltSync(Number(process.env.SALT_ROUNDS) || 10)
     schemaOptions: {
         toObject: {
             transform: (doc, ret, options) => {
+                delete ret.email
                 delete ret.password
                 delete ret.createdAt
                 delete ret.__v
@@ -14,6 +15,7 @@ const saltRounds = bcrypt.genSaltSync(Number(process.env.SALT_ROUNDS) || 10)
         },
         toJSON: {
             transform: (doc, ret, options) => {
+                delete ret.email
                 delete ret.password
                 delete ret.createdAt
                 delete ret.__v
