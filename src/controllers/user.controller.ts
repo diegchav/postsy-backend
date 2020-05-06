@@ -12,6 +12,12 @@ class UserController {
         res.status(OK).json({ status: OK, message: getStatusText(OK), users })
     }
 
+    getProfile = async (req: any, res: Response) => {
+        const { _id } = req.user
+        const user = await this.userService.getById(_id)
+        res.status(OK).json({ status: OK, message: getStatusText(OK), user })
+    }
+
     followUser = async (req: any, res: Response) => {
         const { _id } = req.user
         const { userId } = req.params

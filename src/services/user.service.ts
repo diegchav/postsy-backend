@@ -30,6 +30,11 @@ class UserService {
         return usersResult
     }
 
+    getById = async (id: string) => {
+        const user = await UserModel.findOne({ _id: id })
+        return user
+    }
+
     getByEmail = async (email: string) => {
         const user = await UserModel.findOne({ email }).select('-following')
         return user
