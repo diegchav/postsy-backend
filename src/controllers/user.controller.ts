@@ -1,7 +1,10 @@
 import { Response } from 'express'
+import { isValidObjectId } from 'mongoose'
 import { OK, getStatusText } from 'http-status-codes'
 
 import UserService from '../services/user.service'
+
+import UserNotFoundException from '../exceptions/user-not-found-exception'
 
 class UserController {
     private userService = new UserService()
@@ -12,10 +15,11 @@ class UserController {
         res.status(OK).json({ status: OK, message: getStatusText(OK), users })
     }
 
-    getProfile = async (req: any, res: Response) => {
-        const { _id } = req.user
-        const user = await this.userService.getById(_id)
-        res.status(OK).json({ status: OK, message: getStatusText(OK), user })
+    getUser = async (req: any, res: Response) => {
+        const { id } = req.params
+        if (!isValidObjectId(id)) throw new UserNotFoundException()
+        const user = await this.userService.getById(id)
+        return res.status(OK).json({ status: OK, message: getStatusText(OK), user })
     }
 
     followUser = async (req: any, res: Response) => {
