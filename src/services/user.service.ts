@@ -49,9 +49,8 @@ class UserService {
         // Prevent users follow themeselves
         if (userId === userToFollowId) return
 
+        // Only follow user if is not being followed yet
         const userToFollow = await UserModel.findOne({ _id: userToFollowId })
-
-        // Only add user to follow if is not being followed
         await UserModel.updateOne(
             {
                 _id: userId,
@@ -59,6 +58,22 @@ class UserService {
             },
             {
                 $push: { following: userToFollow as User }
+            }
+        )
+    }
+
+    unfollowUser = async (userId: string, userToUnfollowId: string) => {
+        // Prevent users unfollow themeselves
+        if (userId === userToUnfollowId) return
+
+        const userToUnfollow = await UserModel.findOne({ _id: userToUnfollowId })
+        await UserModel.updateOne(
+            {
+                _id: userId,
+                following: { $in: [userToUnfollow as User] }
+            },
+            {
+                $pull: { following: userToUnfollow?._id }
             }
         )
     }
