@@ -47,6 +47,9 @@ export class User {
     @arrayProp({ itemsRef: User })
     public following!: Ref<User>[]
 
+    @arrayProp({ itemsRef: User })
+    public followers!: Ref<User>[]
+
     @prop({ default: Date.now })
     public createdAt?: Date
 }

@@ -60,6 +60,18 @@ class UserService {
                 $push: { following: userToFollow as User }
             }
         )
+
+        // Add signed in user to the followers list of the user being followed
+        const user = await UserModel.findOne({ _id: userId })
+        await UserModel.updateOne(
+            {
+                _id: userToFollowId,
+                followers: { $nin: [user as User] }
+            },
+            {
+                $push: { followers: user as User }
+            }
+        )
     }
 
     unfollowUser = async (userId: string, userToUnfollowId: string) => {
