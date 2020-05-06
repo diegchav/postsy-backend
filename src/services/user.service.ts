@@ -32,6 +32,8 @@ class UserService {
 
     getById = async (id: string) => {
         const user = await UserModel.findOne({ _id: id })
+            .populate('following', '_id name')
+            .populate('followers', '_id name')
         return user
     }
 
