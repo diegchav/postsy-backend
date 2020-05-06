@@ -88,6 +88,19 @@ class UserService {
                 $pull: { following: userToUnfollow?._id }
             }
         )
+
+        // Remove signed in user from the followers list of the user being
+        // unfollowed
+        const user = await UserModel.findOne({ _id: userId })
+        await UserModel.updateOne(
+            {
+                _id: userToUnfollowId,
+                followers: { $in: [user as User] }
+            },
+            {
+                $pull: { followers: user?._id }
+            }
+        )
     }
 }
 
