@@ -1,4 +1,5 @@
 import { Response } from 'express'
+import { body } from 'express-validator'
 import { isValidObjectId } from 'mongoose'
 import { OK, getStatusText } from 'http-status-codes'
 
@@ -20,6 +21,19 @@ class UserController {
         if (!isValidObjectId(id)) throw new UserNotFoundException()
         const user = await this.userService.getById(id)
         return res.status(OK).json({ status: OK, message: getStatusText(OK), user })
+    }
+
+    updateValidation = [
+        body('name')
+            .not().isEmpty().withMessage('Name is required').bail()
+            .isLength({ max: 120 }).withMessage('Name must be at most 120 characters')
+    ]
+
+    updateUser = async (req: any, res: Response) => {
+        const { _id } = req.user
+        const { name } = req.body
+        await this.userService.update(_id, name)
+        return res.status(OK).json({ status: OK, message: getStatusText(OK) })
     }
 
     followUser = async (req: any, res: Response) => {

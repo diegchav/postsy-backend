@@ -43,6 +43,21 @@ class UserService {
         return user
     }
 
+    update = async (id: string, name: string) => {
+        try {
+            await UserModel.updateOne(
+                {
+                    _id: id
+                },
+                {
+                    name
+                }
+            )
+        } catch (err) {
+            throw err
+        }
+    }
+
     verifyUser = async (_id: string) => {
         try {
             const user = await UserModel.findOne({ _id })

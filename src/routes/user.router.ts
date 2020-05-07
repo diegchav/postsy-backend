@@ -3,6 +3,8 @@ import { Router } from 'express'
 import AuthController from '../controllers/auth.controller'
 import UserController from '../controllers/user.controller'
 
+import { validateRequest } from '../middleware'
+
 import autoCatch from '../common/auto-catch'
 
 class UserRouter {
@@ -22,6 +24,11 @@ class UserRouter {
         this._router.get('/:id',
             this.authController.validateUser,
             autoCatch(this.userController.getUser))
+        this._router.put('/',
+            this.authController.validateUser,
+            this.userController.updateValidation,
+            validateRequest,
+            autoCatch(this.userController.updateUser))
         this._router.post('/follow/:userId',
             this.authController.validateUser,
             autoCatch(this.userController.followUser))
