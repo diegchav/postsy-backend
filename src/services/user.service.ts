@@ -18,12 +18,13 @@ class UserService {
         const followedUsers = currentUser?.following || []
         const followedUsersMap: Map<string, boolean> = new Map<string, boolean>()
         followedUsers.forEach((user) => followedUsersMap.set(user.toString(), true))
-        const users = await UserModel.find({ _id: { $ne: userId } }).select('-following')
+        const users = await UserModel.find({ _id: { $ne: userId } })
         const usersResult = users.map((user) => (
             {
                 _id: user._id,
                 name: user.name,
                 email: user.email,
+                bio: user.bio,
                 following: followedUsersMap.has(user._id.toString())
             }
         ))
