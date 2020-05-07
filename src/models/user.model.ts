@@ -46,6 +46,9 @@ export class User {
     @prop({ required: true, unique: true })
     public email!: string
 
+    @prop({ default: '' })
+    public bio?: string
+
     @arrayProp({ itemsRef: User })
     public following!: Ref<User>[]
 
