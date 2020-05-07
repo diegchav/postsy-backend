@@ -31,8 +31,8 @@ class UserController {
 
     updateUser = async (req: any, res: Response) => {
         const { _id } = req.user
-        const { name } = req.body
-        await this.userService.update(_id, name)
+        const { name, bio } = req.body
+        await this.userService.update(_id, name, bio)
         return res.status(OK).json({ status: OK, message: getStatusText(OK) })
     }
 

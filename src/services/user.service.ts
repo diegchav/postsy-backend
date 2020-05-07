@@ -43,14 +43,15 @@ class UserService {
         return user
     }
 
-    update = async (id: string, name: string) => {
+    update = async (id: string, name: string, bio: string = '') => {
         try {
             await UserModel.updateOne(
                 {
                     _id: id
                 },
                 {
-                    name
+                    name,
+                    bio
                 }
             )
         } catch (err) {
