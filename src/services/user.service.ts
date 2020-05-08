@@ -25,6 +25,7 @@ class UserService {
                 name: user.name,
                 email: user.email,
                 bio: user.bio,
+                avatar: user.avatar,
                 following: followedUsersMap.has(user._id.toString())
             }
         ))
