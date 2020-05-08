@@ -6,7 +6,7 @@ class PostService {
     getAll = async (userId: string) => {
         const posts = await PostModel
             .find({ user: userId })
-            .populate('user', '-email')
+            .populate('user', '_id name avatar')
             .sort({ createdAt: -1 })
         return posts
     }
