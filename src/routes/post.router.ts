@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import aws from 'aws-sdk'
-import multer from 'multer'
+import multer, { StorageEngine } from 'multer'
 import multerS3 from 'multer-s3'
 
 import AuthController from '../controllers/auth.controller'
@@ -9,24 +9,39 @@ import PostController from '../controllers/post.controller'
 import autoCatch from '../common/auto-catch'
 import { validateRequest } from '../middleware'
 
+import { UPLOADS_DIR, AWS_UPLOAD } from '../constants'
+
 const s3 = new aws.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY,
     secretAccessKey: process.env.AWS_SECRET_KEY
 })
 
-const upload = multer({
-    storage: multerS3({
+let storage: StorageEngine
+if (AWS_UPLOAD) {
+    storage = multerS3({
         s3,
         bucket: process.env.AWS_BUCKET_NAME || '',
         acl: 'public-read',
         key: function(req, file, cb) {
-            cb(null, Date.now().toString())
+            const timestamp = Date.now()
+            const fileExtension = file.originalname.split('.')[file.originalname.split('.').length - 1]
+            cb(null, `${timestamp}.${fileExtension}`)
         }
-    }),
-    limits: {
-        fileSize: 2000000
-    }
-})
+    })
+} else {
+    storage = multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, UPLOADS_DIR)
+        },
+        filename: (req, file, cb) => {
+            const timestamp = Date.now()
+            const fileExtension = file.originalname.split('.')[file.originalname.split('.').length - 1]
+            cb(null, `${timestamp}.${fileExtension}`)
+        }
+    })
+}
+
+const upload = multer({ storage })
 
 class PostRouter {
     private authController = new AuthController()

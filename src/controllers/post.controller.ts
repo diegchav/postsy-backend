@@ -6,6 +6,8 @@ import PostService from '../services/post.service'
 
 import ForbiddenException from '../exceptions/forbidden-exception'
 
+import getFileLocation from '../helpers/get-file-location'
+
 class PostController {
     private postService = new PostService()
 
@@ -24,7 +26,7 @@ class PostController {
         const { _id } = req.user
         const { text } = req.body
         let imageUrl = ''
-        if (req.file) imageUrl = `${req.file.location}`
+        if (req.file) imageUrl = getFileLocation(req)
         await this.postService.create(_id, text, imageUrl)
         res.status(CREATED).json({ status: CREATED, message: getStatusText(CREATED) })
     }
