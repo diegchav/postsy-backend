@@ -1,4 +1,5 @@
 import { PostModel } from '../models/post.model'
+import { FeedModel } from '../models/feed.model'
 
 import logger from '../common/logger'
 
@@ -28,6 +29,7 @@ class PostService {
 
     delete = async (id: string) => {
         await PostModel.deleteOne({ _id: id })
+        await FeedModel.deleteMany({ post: id })
         logger.info(`Deleted post: ${id}`)
     }
 }
