@@ -2,6 +2,7 @@ import { Router } from 'express'
 
 import AuthController from '../controllers/auth.controller'
 import UserController from '../controllers/user.controller'
+import PostController from '../controllers/post.controller'
 
 import { validateRequest } from '../middleware'
 
@@ -12,6 +13,7 @@ class UserRouter {
 
     private authController = new AuthController()
     private userController = new UserController()
+    private postController = new PostController()
 
     constructor() {
         this.initializeRoutes()
@@ -29,6 +31,9 @@ class UserRouter {
             this.userController.updateValidation,
             validateRequest,
             autoCatch(this.userController.updateUser))
+        this._router.get('/:id/posts',
+            this.authController.validateUser,
+            autoCatch(this.postController.getForId))
         this._router.post('/follow/:userId',
             this.authController.validateUser,
             autoCatch(this.userController.followUser))

@@ -1,4 +1,4 @@
-import { Response } from 'express'
+import { Request, Response } from 'express'
 import { body } from 'express-validator'
 import { OK, CREATED, getStatusText } from 'http-status-codes'
 
@@ -14,7 +14,13 @@ class PostController {
     getAll = async (req: any, res: Response) => {
         const { _id } = req.user
         const posts = await this.postService.getAll(_id)
-        res.status(OK).json({ status: OK, posts })
+        res.status(OK).json({ status: OK, message: getStatusText(OK), posts })
+    }
+
+    getForId = async (req: Request, res: Response) => {
+        const { id } = req.params
+        const posts = await this.postService.getAll(id)
+        res.status(OK).json({ status: OK, message: getStatusText(OK), posts })
     }
 
     createPostValidation = [
