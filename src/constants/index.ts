@@ -18,3 +18,7 @@ export const MONGO_DUP_KEY = 11000
  */
 export const UPLOADS_DIR = path.join(__dirname, '../..', 'public/uploads')
 export const AWS_UPLOAD = process.env.AWS_UPLOAD === 'true' || false
+export const IMAGE_TYPE_PNG = 'png'
+export const IMAGE_TYPE_JPG = 'jpg'
+export const IMAGE_TYPE_JPEG = 'jpeg'
+export const IMAGE_TYPE_GIF = 'gif'

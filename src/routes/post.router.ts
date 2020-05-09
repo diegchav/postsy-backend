@@ -6,10 +6,21 @@ import multerS3 from 'multer-s3'
 import AuthController from '../controllers/auth.controller'
 import PostController from '../controllers/post.controller'
 
+import InvalidImageException from '../exceptions/invalid-image-exception'
+
 import autoCatch from '../common/auto-catch'
 import { validateRequest } from '../middleware'
 
-import { UPLOADS_DIR, AWS_UPLOAD } from '../constants'
+import getFileExtension from '../helpers/get-file-extension'
+
+import {
+    UPLOADS_DIR,
+    AWS_UPLOAD,
+    IMAGE_TYPE_PNG,
+    IMAGE_TYPE_JPG,
+    IMAGE_TYPE_JPEG,
+    IMAGE_TYPE_GIF
+} from '../constants'
 
 const s3 = new aws.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY,
@@ -24,7 +35,7 @@ if (AWS_UPLOAD) {
         acl: 'public-read',
         key: function(req, file, cb) {
             const timestamp = Date.now()
-            const fileExtension = file.originalname.split('.')[file.originalname.split('.').length - 1]
+            const fileExtension = getFileExtension(file.originalname)
             cb(null, `${timestamp}.${fileExtension}`)
         }
     })
@@ -35,13 +46,23 @@ if (AWS_UPLOAD) {
         },
         filename: (req, file, cb) => {
             const timestamp = Date.now()
-            const fileExtension = file.originalname.split('.')[file.originalname.split('.').length - 1]
+            const fileExtension = getFileExtension(file.originalname)
             cb(null, `${timestamp}.${fileExtension}`)
         }
     })
 }
 
-const upload = multer({ storage })
+const upload = multer({
+    storage,
+    fileFilter: (req, file, cb) => {
+        const validExtensions = [IMAGE_TYPE_PNG, IMAGE_TYPE_JPG, IMAGE_TYPE_JPEG, IMAGE_TYPE_GIF]
+        const fileExtension = getFileExtension(file.originalname)
+        if (!validExtensions.includes(fileExtension)) {
+            cb(new InvalidImageException(file.fieldname))
+        }
+        cb(null, true)
+    }
+})
 
 class PostRouter {
     private authController = new AuthController()
