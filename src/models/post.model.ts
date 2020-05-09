@@ -21,7 +21,11 @@ import { User } from './user.model'
 })
 
 export class Post {
-    @prop({ required: true })
+    @prop({
+        required: true,
+        trim: true,
+        maxlength: 150
+    })
     public text!: string
 
     @prop()

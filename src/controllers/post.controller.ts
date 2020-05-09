@@ -20,6 +20,7 @@ class PostController {
     createPostValidation = [
         body('text')
             .not().isEmpty().withMessage('Text for the post is required')
+            .isLength({ max: 150 }).withMessage('Posts must be at most 150 characters')
     ]
 
     create = async (req: any, res: Response) => {
