@@ -3,6 +3,7 @@ import { body } from 'express-validator'
 import { OK, CREATED, getStatusText } from 'http-status-codes'
 
 import PostService from '../services/post.service'
+import FeedService from '../services/feed.service'
 
 import ForbiddenException from '../exceptions/forbidden-exception'
 
@@ -10,6 +11,7 @@ import getFileLocation from '../helpers/get-file-location'
 
 class PostController {
     private postService = new PostService()
+    private feedService = new FeedService()
 
     getAll = async (req: any, res: Response) => {
         const { _id } = req.user
@@ -32,9 +34,15 @@ class PostController {
     create = async (req: any, res: Response) => {
         const { _id } = req.user
         const { text } = req.body
+
+        // Create post
         let imageUrl = ''
         if (req.file) imageUrl = getFileLocation(req)
-        await this.postService.create(_id, text, imageUrl)
+        const createdPost = await this.postService.create(_id, text, imageUrl)
+
+        // Add post to feeds collection
+        await this.feedService.create(createdPost._id, _id, createdPost.createdAt)
+
         res.status(CREATED).json({ status: CREATED, message: getStatusText(CREATED) })
     }
 

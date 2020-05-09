@@ -35,7 +35,7 @@ export class Post {
     public user!: Ref<User>
 
     @prop({ default: Date.now })
-    public createdAt?: Date
+    public createdAt!: Date
 
     public get fromNow() {
         return moment(this.createdAt).fromNow()

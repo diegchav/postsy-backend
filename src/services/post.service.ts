@@ -17,12 +17,13 @@ class PostService {
     }
 
     create = async (userId: string, text: string, imageUrl: string) => {
-        const { _id } = await PostModel.create({
+        const _post = await PostModel.create({
             text,
             imageUrl,
             user: userId
         })
-        logger.info(`Created post: ${_id}`)
+        logger.info(`Created post: ${_post._id}`)
+        return _post
     }
 
     delete = async (id: string) => {
