@@ -11,6 +11,11 @@ class FeedService {
         })
         logger.info(`Created feed with post '${_feed.post}' for user '${_feed.user}'`)
     }
+
+    getAll = async (userId: string) => {
+        const _feeds = await FeedModel.find({ user: userId })
+        return _feeds
+    }
 }
 
 export default FeedService

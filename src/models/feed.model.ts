@@ -1,7 +1,22 @@
-import { prop, Ref, getModelForClass } from '@typegoose/typegoose'
+import { modelOptions, prop, Ref, getModelForClass } from '@typegoose/typegoose'
 
 import { Post } from './post.model'
 import { User } from './user.model'
+
+@modelOptions({
+    schemaOptions: {
+        toJSON: {
+            transform: (doc, ret, options) => {
+                delete ret.__v
+            }
+        },
+        toObject: {
+            transform: (doc, ret, options) => {
+                delete ret.__v
+            }
+        }
+    }
+})
 
 export class Feed {
     @prop({ required: true, ref: Post })
