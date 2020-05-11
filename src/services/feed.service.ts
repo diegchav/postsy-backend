@@ -16,6 +16,7 @@ class FeedService {
         const _feeds = await FeedModel.find({ user: userId })
             .populate('post', '_id imageUrl text fromNow')
             .populate('user', 'avatar name')
+            .sort({ createdAt: -1 })
         return _feeds
     }
 }
