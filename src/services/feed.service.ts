@@ -14,8 +14,8 @@ class FeedService {
 
     getAll = async (userId: string) => {
         const _feeds = await FeedModel.find({ user: userId })
-            .populate('post')
-            .populate('user')
+            .populate('post', '_id imageUrl text fromNow')
+            .populate('user', 'avatar name')
         return _feeds
     }
 }
