@@ -87,6 +87,11 @@ class PostRouter {
         this._router.delete('/:id',
             this.authController.validateUser,
             autoCatch(this.postController.delete))
+        this._router.post('/:id/comment',
+            this.authController.validateUser,
+            this.postController.createCommentValidation,
+            validateRequest,
+            autoCatch(this.postController.createComment))
     }
 
     get router() {

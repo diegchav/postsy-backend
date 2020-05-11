@@ -5,8 +5,7 @@ import { OK, CREATED, getStatusText } from 'http-status-codes'
 import PostService from '../services/post.service'
 import FeedService from '../services/feed.service'
 import UserService from '../services/user.service'
-
-import { User } from '../models/user.model'
+import CommentService from '../services/comment.service'
 
 import ForbiddenException from '../exceptions/forbidden-exception'
 
@@ -16,6 +15,7 @@ class PostController {
     private postService = new PostService()
     private feedService = new FeedService()
     private userService = new UserService()
+    private commentService = new CommentService()
 
     getAll = async (req: any, res: Response) => {
         const { _id } = req.user
@@ -75,6 +75,20 @@ class PostController {
 
         await this.postService.delete(id)
         res.status(OK).json({ status: OK, message: getStatusText(OK) })
+    }
+
+    createCommentValidation = [
+        body('text')
+            .not().isEmpty().withMessage('Text for the comment is required')
+            .isLength({ max: 150 }).withMessage('Comments must be at most 150 characters')
+    ]
+
+    createComment = async (req: any, res: Response) => {
+        const { text } = req.body
+        const postId = req.params.id
+        const userId = req.user._id
+        await this.commentService.create(text, postId, userId)
+        res.status(CREATED).json({ status: CREATED, message: getStatusText(CREATED) })
     }
 }
 
