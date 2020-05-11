@@ -15,11 +15,9 @@ class FeedService {
 
     getAll = async (userId: string) => {
         const _feeds = await FeedModel.find({ user: userId })
-            .populate({
-                path: 'post',
-                select: 'text imageUrl fromNow',
-                populate: { path: 'user', select: 'name avatar' }
-            })
+            .select('-user -createdAt')
+            .populate('post', 'text imageUrl fromNow')
+            .populate('postOwner', 'avatar name')
             .sort({ createdAt: -1 })
         return _feeds
     }
