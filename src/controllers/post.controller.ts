@@ -90,6 +90,12 @@ class PostController {
         await this.commentService.create(text, postId, userId)
         res.status(CREATED).json({ status: CREATED, message: getStatusText(CREATED) })
     }
+
+    getComments = async (req: Request, res: Response) => {
+        const postId = req.params.id
+        const _comments = await this.commentService.getForPost(postId)
+        res.status(OK).json({ status: OK, message: getStatusText(OK), comments: _comments })
+    }
 }
 
 export default PostController

@@ -92,6 +92,9 @@ class PostRouter {
             this.postController.createCommentValidation,
             validateRequest,
             autoCatch(this.postController.createComment))
+        this._router.get('/:id/comments',
+            this.authController.validateUser,
+            autoCatch(this.postController.getComments))
     }
 
     get router() {
