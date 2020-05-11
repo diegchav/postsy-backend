@@ -23,6 +23,9 @@ export class Feed {
     public post!: Ref<Post>
 
     @prop({ required: true, ref: User })
+    public postOwner!: Ref<User>
+
+    @prop({ required: true, ref: User })
     public user!: Ref<User>
 
     @prop({ required: true })

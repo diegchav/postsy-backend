@@ -3,9 +3,10 @@ import { FeedModel } from '../models/feed.model'
 import logger from '../common/logger'
 
 class FeedService {
-    create = async (postId: string, userId: string, createdAt: Date) => {
+    create = async (postId: string, postOwnerId: string, userId: string, createdAt: Date) => {
         const _feed = await FeedModel.create({
             post: postId,
+            postOwner: postOwnerId,
             user: userId,
             createdAt
         })

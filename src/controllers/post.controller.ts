@@ -41,7 +41,11 @@ class PostController {
         const createdPost = await this.postService.create(_id, text, imageUrl)
 
         // Add post to feeds collection
-        await this.feedService.create(createdPost._id, _id, createdPost.createdAt)
+        await this.feedService.create(
+            createdPost._id,
+            _id,
+            _id,
+            createdPost.createdAt)
 
         res.status(CREATED).json({ status: CREATED, message: getStatusText(CREATED) })
     }
