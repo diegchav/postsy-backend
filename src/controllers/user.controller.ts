@@ -4,11 +4,15 @@ import { isValidObjectId } from 'mongoose'
 import { OK, getStatusText } from 'http-status-codes'
 
 import UserService from '../services/user.service'
+import PostService from '../services/post.service'
+import FeedService from '../services/feed.service'
 
 import UserNotFoundException from '../exceptions/user-not-found-exception'
 
 class UserController {
     private userService = new UserService()
+    private postService = new PostService()
+    private feedService = new FeedService()
 
     getAll = async (req: any, res: Response) => {
         const { _id } = req.user
@@ -39,14 +43,32 @@ class UserController {
     followUser = async (req: any, res: Response) => {
         const { _id } = req.user
         const { userId } = req.params
+
         await this.userService.followUser(_id, userId)
+
+        // Add all posts from user to follow to feeds collection
+        const _posts = await this.postService.getAll(userId)
+        _posts.forEach(async (post) => {
+            await this.feedService.create(
+                post._id,
+                userId,
+                _id,
+                post.createdAt
+            )
+        })
+
         res.status(OK).json({ status: OK, message: getStatusText(OK) })
     }
 
     unfollowUser = async (req: any, res: Response) => {
         const { _id } = req.user
         const { userId } = req.params
+
         await this.userService.unfollowUser(_id, userId)
+
+        // Remove all posts of user to unfollow from feeds collection
+        await this.feedService.deleteByPostOwnerId(userId, _id)
+
         res.status(OK).json({ status: OK, message: getStatusText(OK) })
     }
 }

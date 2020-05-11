@@ -13,6 +13,11 @@ class FeedService {
         logger.info(`Created feed with post '${_feed.post}' for user '${_feed.user}'`)
     }
 
+    deleteByPostOwnerId = async (postOwnerId: string, userId: string) => {
+        await FeedModel.deleteMany({ postOwner: postOwnerId, user: userId })
+        logger.info(`Deleted feeds from post onwer ${postOwnerId}`)
+    }
+
     getAll = async (userId: string) => {
         const _feeds = await FeedModel.find({ user: userId })
             .select('-user -createdAt')
