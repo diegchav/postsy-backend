@@ -4,6 +4,9 @@ import { OK, CREATED, getStatusText } from 'http-status-codes'
 
 import PostService from '../services/post.service'
 import FeedService from '../services/feed.service'
+import UserService from '../services/user.service'
+
+import { User } from '../models/user.model'
 
 import ForbiddenException from '../exceptions/forbidden-exception'
 
@@ -12,6 +15,7 @@ import getFileLocation from '../helpers/get-file-location'
 class PostController {
     private postService = new PostService()
     private feedService = new FeedService()
+    private userService = new UserService()
 
     getAll = async (req: any, res: Response) => {
         const { _id } = req.user
@@ -38,14 +42,26 @@ class PostController {
         // Create post
         let imageUrl = ''
         if (req.file) imageUrl = getFileLocation(req)
-        const createdPost = await this.postService.create(_id, text, imageUrl)
+        const _post = await this.postService.create(_id, text, imageUrl)
 
         // Add post to feeds collection
         await this.feedService.create(
-            createdPost._id,
+            _post._id,
             _id,
             _id,
-            createdPost.createdAt)
+            _post.createdAt)
+
+        // Feed post to all followers
+        const _user = await this.userService.getById(_id)
+        const _followers = _user?.followers
+        _followers?.forEach(async (follower: any) => {
+            await this.feedService.create(
+                _post.id,
+                _id,
+                follower._id,
+                _post.createdAt
+            )
+        })
 
         res.status(CREATED).json({ status: CREATED, message: getStatusText(CREATED) })
     }
