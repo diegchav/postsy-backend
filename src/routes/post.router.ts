@@ -98,10 +98,10 @@ class PostRouter {
         this._router.get('/:id/comments',
             this.authController.validateUser,
             autoCatch(this.postController.getComments))
-        this._router.post('/:id/like',
+        this._router.put('/:id/like',
             this.authController.validateUser,
             autoCatch(this.postController.likePost))
-        this._router.post('/:id/dislike',
+        this._router.put('/:id/dislike',
             this.authController.validateUser,
             autoCatch(this.postController.dislikePost))
     }
