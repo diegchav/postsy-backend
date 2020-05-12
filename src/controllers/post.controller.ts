@@ -19,13 +19,19 @@ class PostController {
 
     getAll = async (req: any, res: Response) => {
         const { _id } = req.user
-        const posts = await this.postService.getAll(_id)
+        const posts = await this.postService.getForUser(_id)
         res.status(OK).json({ status: OK, message: getStatusText(OK), posts })
     }
 
-    getForId = async (req: Request, res: Response) => {
+    getById = async (req: Request, res: Response) => {
         const { id } = req.params
-        const posts = await this.postService.getAll(id)
+        const _post = await this.postService.getById(id)
+        res.status(OK).json({ status: OK, message: getStatusText(OK), post: _post })
+    }
+
+    getForUser = async (req: Request, res: Response) => {
+        const userId = req.params.id
+        const posts = await this.postService.getForUser(userId)
         res.status(OK).json({ status: OK, message: getStatusText(OK), posts })
     }
 

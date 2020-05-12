@@ -33,7 +33,7 @@ class UserRouter {
             autoCatch(this.userController.updateUser))
         this._router.get('/:id/posts',
             this.authController.validateUser,
-            autoCatch(this.postController.getForId))
+            autoCatch(this.postController.getForUser))
         this._router.post('/follow/:userId',
             this.authController.validateUser,
             autoCatch(this.userController.followUser))

@@ -47,7 +47,7 @@ class UserController {
         await this.userService.followUser(_id, userId)
 
         // Add all posts from user to follow to feeds collection
-        const _posts = await this.postService.getAll(userId)
+        const _posts = await this.postService.getForUser(userId)
         _posts.forEach(async (post) => {
             await this.feedService.create(
                 post._id,

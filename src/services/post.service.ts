@@ -4,17 +4,25 @@ import { FeedModel } from '../models/feed.model'
 import logger from '../common/logger'
 
 class PostService {
-    getAll = async (userId: string) => {
-        const posts = await PostModel
-            .find({ user: userId })
-            .populate('user', '_id name avatar')
+    getAll = async () => {
+        const _posts = await PostModel
+            .find()
             .sort({ createdAt: -1 })
-        return posts
+        return _posts
     }
 
     getById = async (id: string) => {
         const post = await PostModel.findOne({ _id: id })
+            .populate('user', 'avatar name')
         return post
+    }
+
+    getForUser = async (userId: string) => {
+        const _posts = await PostModel
+            .find({ user: userId })
+            .populate('user', '_id name avatar')
+            .sort({ createdAt: -1 })
+        return _posts
     }
 
     create = async (userId: string, text: string, imageUrl: string) => {

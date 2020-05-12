@@ -84,6 +84,9 @@ class PostRouter {
             this.postController.createPostValidation,
             validateRequest,
             autoCatch(this.postController.create))
+        this._router.get('/:id',
+            this.authController.validateUser,
+            autoCatch(this.postController.getById))
         this._router.delete('/:id',
             this.authController.validateUser,
             autoCatch(this.postController.delete))
