@@ -36,6 +36,16 @@ class FeedService {
         })
         logger.info(`Liked post feed ${postId} for user ${userId}`)
     }
+
+    dislike = async (postId: string, userId: string) => {
+        await FeedModel.updateOne({
+            post: postId,
+            user: userId
+        }, {
+            liked: false
+        })
+        logger.info(`Disliked post feed ${postId} for user ${userId}`)
+    }
 }
 
 export default FeedService

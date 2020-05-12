@@ -101,6 +101,9 @@ class PostRouter {
         this._router.post('/:id/like',
             this.authController.validateUser,
             autoCatch(this.postController.likePost))
+        this._router.post('/:id/dislike',
+            this.authController.validateUser,
+            autoCatch(this.postController.dislikePost))
     }
 
     get router() {

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { body } from 'express-validator'
-import { OK, CREATED, getStatusText } from 'http-status-codes'
+import { OK, CREATED, getStatusText, NO_CONTENT } from 'http-status-codes'
 
 import PostService from '../services/post.service'
 import FeedService from '../services/feed.service'
@@ -110,7 +110,15 @@ class PostController {
         const userId = req.user._id
         await this.likeService.like(postId, userId)
         await this.feedService.like(postId, userId)
-        res.status(CREATED).json({ status: CREATED, message: getStatusText(CREATED) })
+        res.status(OK).json({ status: OK, message: getStatusText(OK) })
+    }
+
+    dislikePost = async (req: any, res: Response) => {
+        const postId = req.params.id
+        const userId = req.user._id
+        await this.likeService.dislike(postId, userId)
+        await this.feedService.dislike(postId, userId)
+        res.status(OK).json({ status: OK, message: getStatusText(OK) })
     }
 }
 
