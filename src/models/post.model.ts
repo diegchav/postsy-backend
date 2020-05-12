@@ -1,4 +1,4 @@
-import { modelOptions, prop, getModelForClass, Ref } from '@typegoose/typegoose'
+import { modelOptions, prop, arrayProp ,getModelForClass, Ref } from '@typegoose/typegoose'
 import moment from 'moment'
 
 import { User } from './user.model'
@@ -33,6 +33,9 @@ export class Post {
 
     @prop({ required: true, ref: User })
     public user!: Ref<User>
+
+    @arrayProp({ itemsRef: User })
+    public likes!: Ref<User>[]
 
     @prop({ default: Date.now })
     public createdAt!: Date

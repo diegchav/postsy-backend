@@ -28,6 +28,9 @@ export class Feed {
     @prop({ required: true, ref: User })
     public user!: Ref<User>
 
+    @prop({ default: false })
+    public liked!: boolean
+
     @prop({ required: true })
     public createdAt!: Date
 }

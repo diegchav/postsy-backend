@@ -6,6 +6,7 @@ import PostService from '../services/post.service'
 import FeedService from '../services/feed.service'
 import UserService from '../services/user.service'
 import CommentService from '../services/comment.service'
+import LikeService from '../services/like.service'
 
 import ForbiddenException from '../exceptions/forbidden-exception'
 
@@ -16,6 +17,7 @@ class PostController {
     private feedService = new FeedService()
     private userService = new UserService()
     private commentService = new CommentService()
+    private likeService = new LikeService()
 
     getAll = async (req: any, res: Response) => {
         const { _id } = req.user
@@ -101,6 +103,14 @@ class PostController {
         const postId = req.params.id
         const _comments = await this.commentService.getForPost(postId)
         res.status(OK).json({ status: OK, message: getStatusText(OK), comments: _comments })
+    }
+
+    likePost = async (req: any, res: Response) => {
+        const postId = req.params.id
+        const userId = req.user._id
+        await this.likeService.like(postId, userId)
+        await this.feedService.like(postId, userId)
+        res.status(CREATED).json({ status: CREATED, message: getStatusText(CREATED) })
     }
 }
 

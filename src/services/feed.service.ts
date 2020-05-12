@@ -26,6 +26,16 @@ class FeedService {
             .sort({ createdAt: -1 })
         return _feeds
     }
+
+    like = async (postId: string, userId: string) => {
+        await FeedModel.updateOne({
+            post: postId,
+            user: userId,
+        }, {
+            liked: true
+        })
+        logger.info(`Liked post feed ${postId} for user ${userId}`)
+    }
 }
 
 export default FeedService
