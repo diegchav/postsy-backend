@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { body } from 'express-validator'
-import { OK, getStatusText } from 'http-status-codes'
+import { OK, CREATED, getStatusText } from 'http-status-codes'
 import bcrypt from 'bcrypt'
 
 import AuthService from '../services/auth.service'
@@ -45,7 +45,7 @@ class AuthController {
         const userFields = {...req.body}
         const createdUser = await this.userService.create(userFields)
         logger.info(`User signed up: ${createdUser}`)
-        res.json({ status: OK, message: getStatusText(OK), user: createdUser })
+        res.status(CREATED).json({ status: CREATED, message: getStatusText(CREATED), user: createdUser })
     }
 
     signInValidation = [

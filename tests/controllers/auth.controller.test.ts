@@ -1,5 +1,5 @@
 import request from 'supertest'
-import { BAD_REQUEST, OK, getStatusText } from 'http-status-codes'
+import { BAD_REQUEST, OK, CREATED, getStatusText } from 'http-status-codes'
 
 import app from '../../src/server'
 import DBHandler from '../db-handler'
@@ -88,11 +88,11 @@ describe('AuthController', () => {
         it('should sign up a user', async () => {
             const res = await request(app).post(apiPath + '/signup')
                 .send(userValid)
-                .expect(OK)
+                .expect(CREATED)
                 .expect('Content-Type', /json/)
 
-            expect(res.body.status).toEqual(OK)
-            expect(res.body.message).toEqual(getStatusText(OK))
+            expect(res.body.status).toEqual(CREATED)
+            expect(res.body.message).toEqual(getStatusText(CREATED))
         })
 
         /**
