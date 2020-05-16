@@ -2,6 +2,8 @@ import { UserModel, User } from '../models/user.model'
 
 import AuthorizationException from '../exceptions/authorization-exception'
 
+import logger from '../common/logger'
+
 class UserService {
     create = async (userFields: any) => {
         const { name, password, email } = userFields
@@ -10,6 +12,7 @@ class UserService {
             password,
             email
         } as User)
+        logger.info(`Created user: ${user}`)
         return { _id: user._id, name: user.name, email: user.email }
     }
 
@@ -56,6 +59,7 @@ class UserService {
                     bio
                 }
             )
+            logger.info(`Updated user with id: ${id}`)
         } catch (err) {
             throw err
         }
@@ -98,6 +102,8 @@ class UserService {
                 $push: { followers: user as User }
             }
         )
+
+        logger.info(`Followed user ${userToFollowId} by user ${userId}`)
     }
 
     unfollowUser = async (userId: string, userToUnfollowId: string) => {
@@ -127,6 +133,8 @@ class UserService {
                 $pull: { followers: user?._id }
             }
         )
+
+        logger.info(`Unfollowed user ${userToUnfollowId} by user ${userId}`)
     }
 }
 
