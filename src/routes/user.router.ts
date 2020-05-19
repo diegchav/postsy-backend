@@ -6,7 +6,7 @@ import PostController from '../controllers/post.controller'
 
 import { validateRequest } from '../middleware'
 
-import autoCatch from '../common/auto-catch'
+import autoCatch from '../helpers/auto-catch'
 
 class UserRouter {
     private _router = Router()

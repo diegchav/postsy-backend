@@ -3,7 +3,7 @@ import { Router } from 'express'
 import AuthController from '../controllers/auth.controller'
 import FeedController from '../controllers/feed.controller'
 
-import autoCatch from '../common/auto-catch'
+import autoCatch from '../helpers/auto-catch'
 
 class FeedRouter {
     private _router = Router()

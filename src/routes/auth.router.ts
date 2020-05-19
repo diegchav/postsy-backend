@@ -2,7 +2,7 @@ import express from 'express'
 
 import AuthController from '../controllers/auth.controller'
 
-import autoCatch from '../common/auto-catch'
+import autoCatch from '../helpers/auto-catch'
 import { validateRequest } from '../middleware'
 
 class AuthRouter {

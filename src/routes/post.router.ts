@@ -8,7 +8,7 @@ import PostController from '../controllers/post.controller'
 
 import InvalidImageException from '../exceptions/invalid-image-exception'
 
-import autoCatch from '../common/auto-catch'
+import autoCatch from '../helpers/auto-catch'
 import { validateRequest } from '../middleware'
 
 import getFileExtension from '../helpers/get-file-extension'
