@@ -8,7 +8,9 @@ import MongoValidationException from '../exceptions/mongo-validation-exception'
 import ValidationException from '../exceptions/validation-exception'
 
 import logger from '../common/logger'
-import { capitalize, toJsonError } from '../common/util'
+
+import capitalize from '../helpers/capitalize'
+import toJsonError from '../helpers/to-json-error'
 
 import { MONGO_DUP_KEY } from '../constants'
 
