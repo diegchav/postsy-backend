@@ -37,3 +37,6 @@ dist
 # Project
 .env
 public
+
+# VS Code
+.vscode
